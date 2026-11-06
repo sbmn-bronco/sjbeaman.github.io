@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8-Week Cut Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6EAEE; --surface:#F7F9FA; --ink:#1B2733; --muted:#5E6B78; --line:#C9D1D8;
+  --red:#C8302E; --blue:#2F5DA8; --run:#7657A8; --yellow:#D9A42B; --green:#3C8D5A; --rest:#9AA5B0;
+  --done:#3C8D5A;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A20; --surface:#1D252D; --ink:#E7ECF0; --muted:#95A2AE; --line:#2E3943;
+    --red:#E0504D; --blue:#5B8BD8; --run:#A48AD6; --yellow:#E8BC4D; --green:#5DB37D; --rest:#5F6B77; --done:#5DB37D;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A20; --surface:#1D252D; --ink:#E7ECF0; --muted:#95A2AE; --line:#2E3943;
+  --red:#E0504D; --blue:#5B8BD8; --run:#A48AD6; --yellow:#E8BC4D; --green:#5DB37D; --rest:#5F6B77; --done:#5DB37D;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
+.month{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,9vw,4.6rem);line-height:.9;letter-spacing:-.01em;margin:0}
+.month span{display:block;font-size:.38em;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:6px}
+.nav{display:flex;gap:6px}
+.nav button{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--surface);cursor:pointer;font-size:1.2rem;display:grid;place-items:center}
+.nav button:hover{border-color:var(--ink)}
+.today-btn{width:auto!important;border-radius:22px!important;padding:0 14px;font-family:var(--display);font-weight:600;font-size:1rem!important}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 14px;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:6px}
+.chip{width:12px;height:12px;border-radius:50%;flex:none}
+
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow div{font-family:var(--display);font-weight:600;color:var(--muted);text-align:center;font-size:.95rem;padding-bottom:4px}
+.day{position:relative;aspect-ratio:1/1.08;min-height:64px;border:0;border-radius:10px;background:var(--surface);cursor:pointer;padding:8px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;transition:transform .12s}
+.day:hover{transform:translateY(-2px)}
+.day.pad{background:transparent;cursor:default;pointer-events:none}
+.day .num{font-family:var(--display);font-weight:600;font-size:1.15rem;line-height:1}
+.day.today .num{background:var(--ink);color:var(--surface);border-radius:6px;padding:2px 6px;align-self:flex-start}
+.day .label{font-size:.78rem;font-weight:600;line-height:1.15;color:var(--muted)}
+.day.rest{background:transparent;border:2px dashed var(--line)}
+.day.rest .label{font-weight:500}
+/* the plate: a bumper-plate disc that fills as you finish exercises */
+.plate{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:50%;
+  background:conic-gradient(var(--c) calc(var(--p)*1%), color-mix(in srgb,var(--c) 22%, transparent) 0)}
+.plate::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--surface)}
+.day.complete .plate{background:var(--c)}
+.day.complete .plate::before{content:"";position:absolute;left:8px;top:6px;width:6px;height:11px;border:solid var(--surface);border-width:0 3px 3px 0;transform:rotate(45deg);z-index:1}
+.day.complete .plate::after{display:none}
+@media (max-width:560px){
+  .day{padding:5px;border-radius:8px;min-height:52px}
+  .day .label{font-size:.66rem}
+  .plate{width:14px;height:14px;right:5px;top:5px}
+  .plate::after{inset:4px}
+  .day.complete .plate::before{left:4px;top:2px;width:4px;height:7px;border-width:0 2px 2px 0}
+  .dow,.grid{gap:4px}
+}
+
+/* day sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,16,22,.45);display:none;z-index:10}
+.scrim.open{display:block}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bg);z-index:11;
+  transform:translateX(100%);transition:transform .22s ease;overflow-y:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 32px)}
+.sheet.open{transform:none}
+@media (prefers-reduced-motion:reduce){.sheet,.day{transition:none}}
+.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.close{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:var(--surface);cursor:pointer;font-size:1.3rem;flex:none}
+.sheet h2{font-family:var(--display);font-weight:700;font-size:2.4rem;line-height:1;margin:0}
+.sheet .date{color:var(--muted);margin:4px 0 0}
+.bar{height:8px;border-radius:4px;background:color-mix(in srgb,var(--c) 20%, transparent);margin:16px 0 20px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c);width:0;transition:width .3s}
+.progress-text{font-size:.9rem;color:var(--muted);margin:-12px 0 18px}
+
+.ex{background:var(--surface);border-radius:12px;padding:16px;margin-bottom:12px;border-left:6px solid var(--c)}
+.ex-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ex h3{margin:0;font-size:1.1rem;font-weight:600}
+.scheme{font-family:var(--display);font-weight:700;font-size:1.6rem;white-space:nowrap;line-height:1}
+.scheme small{font-size:.55em;font-weight:500;color:var(--muted);margin-left:2px}
+.sets{margin:12px 0 14px;display:grid;gap:8px}
+.set{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:10px}
+.set .sn{font-family:var(--display);font-weight:600;font-size:1.05rem}
+.set .reps{color:var(--muted);font-size:.92rem}
+.wt{display:flex;align-items:center;border:2px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden}
+.wt:focus-within{border-color:var(--blue)}
+.wt input{width:78px;border:0;background:transparent;color:var(--ink);font:600 1.05rem var(--body);padding:8px 4px 8px 10px;text-align:right}
+.wt input:focus{outline:none}
+.wt span{padding-right:10px;color:var(--muted);font-size:.85rem}
+.mark{width:100%;min-height:46px;border-radius:8px;border:2px solid var(--ink);background:transparent;font-weight:600;cursor:pointer}
+.mark:hover{background:var(--ink);color:var(--surface)}
+.ex.done{opacity:.72}
+.ex.done .mark{background:var(--done);border-color:var(--done);color:#fff}
+.ex.done .wt{border-style:dashed}
+
+.rest-card{background:var(--surface);border-radius:12px;padding:28px 20px;text-align:center;border:2px dashed var(--line);margin-top:20px}
+.rest-card p{margin:.4em 0;color:var(--muted)}
+.rest-card strong{display:block;font-family:var(--display);font-size:1.6rem;color:var(--ink)}
+.sync{font-size:.8rem;color:var(--muted);margin-top:24px}
+.meta{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.meta li{font-size:.8rem;font-weight:500;padding:3px 9px;border-radius:12px;background:var(--bg);color:var(--muted)}
+.meta li:first-child{background:color-mix(in srgb,var(--c) 16%, transparent);color:var(--ink)}
+.note{margin:10px 0 0;font-size:.92rem;color:var(--muted);max-width:60ch}
+.set{grid-template-columns:1fr auto auto!important}
+.sl{display:flex;flex-direction:column;line-height:1.2}
+.sl .reps{font-size:.82rem}
+.wt.rp input{width:44px}
+@media (max-width:400px){.wt input{width:58px}.wt.rp input{width:36px}.set{gap:6px!important}}
+.month span{white-space:normal}
+.startrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:12px 14px;background:var(--surface);border-radius:10px}
+.startrow label{font-weight:600}
+.startrow input{font:500 1rem var(--body);color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:8px;padding:6px 10px;color-scheme:light dark}
+.startrow input:focus{outline:none;border-color:var(--blue)}
+.startrow .hint{font-size:.88rem;color:var(--muted)}
+.day.pre{background:transparent;opacity:.45}
+.day .label em{display:block;font-style:normal;font-weight:500;font-size:.92em;color:var(--ink);margin-top:2px}
+.day .label em.live{color:var(--c)}
+.timer{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border-radius:12px;padding:14px 16px;margin:16px 0 0}
+.timer .tlabel{display:block;font-size:.85rem;color:var(--muted)}
+.clock{font-family:var(--display);font-weight:700;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.timer.running .clock{color:var(--c)}
+.tbtn{min-height:48px;padding:0 20px;border-radius:24px;border:0;background:var(--c);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap}
+.tbtn.end{background:var(--ink);color:var(--surface)}
+.tbtn.ghost{background:transparent;border:2px solid var(--line);color:var(--muted)}
+.startbtn{margin-top:14px}
+@media (max-width:480px){header{flex-wrap:wrap}.nav button{width:40px;height:40px}}
+.wt input::placeholder{color:var(--muted);opacity:.5;font-weight:400}
+.last{margin:0 0 10px;font-size:.88rem;color:var(--muted)}
+.histbtn{background:none;border:0;padding:4px 0;margin:0 0 10px;color:var(--c);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.hist{margin:0 0 12px;padding:10px 12px;background:var(--bg);border-radius:8px}
+.spark{display:block;width:100%;height:56px;margin-bottom:6px}
+.hist ol{list-style:none;margin:0;padding:0;font-size:.86rem}
+.hist li{display:grid;grid-template-columns:56px 1fr auto;gap:8px;padding:5px 0;border-top:1px solid var(--line)}
+.hist li:first-child{border-top:0}
+.hist li span:first-child{color:var(--muted)}
+.hist strong{font-weight:600}
+.wod{border-left-width:6px;background:
+  repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb,var(--c) 5%, transparent) 10px 20px), var(--surface)}
+.wodtag{display:inline-block;font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.06em;background:var(--ink);color:var(--surface);padding:1px 8px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.wod h3{font-size:1rem}
+.wodlist{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.wodlist li{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:10px;padding:8px 0;position:relative}
+.wodlist li:not(:last-child)::after{content:"";position:absolute;left:15px;top:38px;bottom:-8px;width:2px;background:color-mix(in srgb,var(--c) 40%, transparent)}
+.wn{width:32px;height:32px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:700;position:relative;z-index:1}
+.wm strong{font-family:var(--display);font-size:1.35rem;margin-right:4px}
+.wm small{display:block;color:var(--muted);font-size:.82rem}
+.wodrest{margin:8px 0 12px 42px;font-size:.9rem;color:var(--muted)}
+.wodrest::before{content:"↻ ";color:var(--c);font-weight:700}
+.wodlog{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px}
+.wodlog .last{margin:0}
+.wodlog .wt.rp input{width:48px}
+.group{padding-bottom:16px}
+.grouphead{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grouphead strong{font-family:var(--display);font-size:1.35rem;font-weight:700}
+.howto{margin:0;font-size:.9rem;color:var(--muted)}
+.superset .subex{padding:14px 0 4px 14px;margin-top:10px;border-left:3px solid color-mix(in srgb,var(--c) 45%, transparent);border-top:0}
+.superset .subex + .subex{margin-top:4px}
+.sstag{display:inline-block;font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--c);margin-right:8px}
+.wn.min{background:transparent;color:var(--c);border:2px solid var(--c)}
+.wm em{font-style:normal;color:var(--muted)}
+.scorelbl{font-weight:600;font-size:.9rem}
+.runlog{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:14px 0 12px}
+.runlog .wt input{width:64px}
+.wodlog input[data-kind="mins"]{width:64px!important}
+.pace{font-size:.9rem;font-weight:600;color:var(--c)}
+.run.optional{border-left-style:dashed}
+.ex.done .histbtn{opacity:.8}
+.notes{display:block;margin-top:12px}
+.notes span{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}
+.notes textarea{width:100%;min-height:56px;resize:vertical;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:400 .95rem/1.4 var(--body);padding:8px 10px;field-sizing:content;max-height:240px}
+.notes textarea:focus{outline:none;border-color:var(--blue)}
+.notes textarea::placeholder{color:var(--muted);opacity:.7}
+.hist li .hnote{grid-column:2 / -1;font-style:normal;color:var(--muted);white-space:pre-wrap}
+.extras{margin-top:26px;padding-top:18px;border-top:2px dashed var(--line)}
+.xhead{font-family:var(--display);font-weight:700;font-size:1.6rem;margin:0}
+.xsub{margin:2px 0 14px;color:var(--muted);font-size:.9rem}
+.ex.extra{border-left-style:dashed}
+.xname{flex:1;display:block}
+.xname span{display:block;font-size:.8rem;color:var(--muted);margin-bottom:2px}
+.xname input{width:100%;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:600 1.05rem var(--body);padding:8px 10px}
+.xname input:focus{outline:none;border-color:var(--blue)}
+.ex.extra .ex-top{align-items:flex-end}
+.xtag{font-family:var(--display);font-weight:700;font-size:.9rem;letter-spacing:.05em;color:var(--c);border:2px solid var(--c);border-radius:4px;padding:1px 7px;margin-bottom:8px;text-transform:uppercase}
+.xsets{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-2px 0 12px}
+.xbtn{background:none;border:0;padding:6px 0;font-weight:600;color:var(--c);cursor:pointer}
+.xbtn.danger{color:var(--muted);margin-left:auto}
+.addx{width:100%;min-height:52px;border-radius:10px;border:2px dashed var(--c);background:transparent;color:var(--c);font-weight:700;font-size:1rem;cursor:pointer}
+.addx:hover{background:color-mix(in srgb,var(--c) 10%, transparent)}
+.movewrap{margin:8px 0 0}
+.moverow{display:flex;flex-wrap:wrap;gap:4px 16px}
+.movebtn{background:none;border:0;padding:8px 0;min-height:40px;font-weight:600;color:var(--c,var(--blue));cursor:pointer}
+.movebtn:hover{text-decoration:underline;text-underline-offset:3px}
+.movepanel{background:var(--surface);border-radius:12px;padding:14px;margin:4px 0 6px;display:grid;gap:8px}
+.movepanel[hidden]{display:none}
+.movepanel label{font-weight:600;font-size:.9rem}
+.movepanel input{font:500 1rem var(--body);color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:8px;padding:8px 10px;color-scheme:light dark;max-width:100%}
+.movepanel input:focus{outline:none;border-color:var(--blue)}
+.mvprev{margin:0;font-size:.92rem;color:var(--muted);min-height:2.6em}
+.movepanel .tbtn{width:100%}
+.tbtn:disabled{opacity:.45;cursor:not-allowed}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translate(-50%,20px);max-width:min(440px,calc(100% - 32px));
+  background:var(--ink);color:var(--surface);padding:12px 16px;border-radius:12px;font-weight:500;font-size:.92rem;z-index:20;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+.free{border-left-style:dashed}
+.free .wt input{width:150px;text-align:left}
+.free .notes textarea{min-height:64px}
+.panel{background:var(--surface);border-radius:10px;margin:0 0 10px}
+.panel summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.panel summary::-webkit-details-marker{display:none}
+.panel summary::after{content:"+";font-weight:700;color:var(--muted);font-size:1.2rem}
+.panel[open] summary::after{content:"–"}
+.pbody{padding:0 14px 14px}
+.pbody p{margin:.4em 0;font-size:.92rem;color:var(--muted)}
+.pbody h4{font-family:var(--display);font-size:1.15rem;margin:14px 0 4px}
+.pbody ul{margin:.2em 0 .6em;padding-left:1.1em;font-size:.92rem;color:var(--muted)}
+.pbody li{margin:2px 0}
+.onerm{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.onerm label{display:block;font-size:.85rem;color:var(--muted)}
+.onerm .wt{margin-top:3px}
+.onerm .wt input{width:100%}
+.btab{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:8px}
+.btab th{font-family:var(--display);font-weight:600;text-align:left;color:var(--muted);padding:4px 6px}
+.btab td{padding:4px 6px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.btab .wt input{width:76px}
+.btab .diff{font-weight:600}
+.btab .diff.ok{color:var(--green)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.editrow{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:6px 0 4px}
+.ebtn{background:none;border:0;padding:6px 0;min-height:36px;font-weight:600;color:var(--c,var(--blue));cursor:pointer}
+.ebtn:hover{text-decoration:underline;text-underline-offset:3px}
+.chg{font-size:.78rem;font-weight:600;color:var(--c);border:1.5px solid var(--c);border-radius:10px;padding:0 8px}
+.was{margin:6px 0 0;font-size:.85rem;color:var(--muted)}
+.editpanel{background:var(--bg);border-radius:12px;padding:14px;margin:8px 0 10px;display:grid;gap:10px}
+.editpanel label,.editpanel legend{font-weight:600;font-size:.9rem;display:block}
+.editpanel input[type=text],.editpanel input:not([type]),.editpanel select,.editpanel textarea{width:100%;margin-top:3px;font:500 1rem var(--body);color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:8px;padding:8px 10px}
+.editpanel textarea{min-height:64px;resize:vertical;font-weight:400}
+.editpanel input:focus,.editpanel select:focus,.editpanel textarea:focus{outline:none;border-color:var(--blue)}
+.editpanel fieldset{border:0;margin:0;padding:0;display:grid;gap:4px}
+.editpanel fieldset label{font-weight:500;display:flex;gap:8px;align-items:center;min-height:36px}
+.editpanel fieldset input{width:auto;margin:0}
+.editpanel .hint{margin:0;font-size:.82rem;color:var(--muted);font-weight:400}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.btnrow .tbtn{flex:1 1 auto;min-height:44px}
+.btnrow .ghost{color:var(--ink)}
+.removed{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;margin-bottom:12px;border:2px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.92rem}
+.removed s{color:var(--ink)}
+.warm{border-left-style:dashed;padding:12px 16px}
+.warm h3{font-size:1rem}
+.warm .note{margin-top:4px}
+.warm .mark{min-height:40px;margin-top:8px}
+.wodbody{margin:6px 0 0;font-size:1rem;line-height:1.5}
+.cue{color:var(--muted)}
+.ex.test .scheme{color:var(--c)}
+.logline{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0}
+.logline .wt input{width:100px;text-align:left}
+.ended-card{margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="month" id="monthTitle"></h1>
+    <div class="nav">
+      <button id="prev" aria-label="Previous month">‹</button>
+      <button id="todayBtn" class="today-btn">Today</button>
+      <button id="next" aria-label="Next month">›</button>
+    </div>
+  </header>
+  <div class="startrow">
+    <label for="startDate">Program start (Day 1)</label>
+    <input type="date" id="startDate">
+    <span class="hint" id="startHint"></span>
+  </div>
+  <details class="panel" id="onermPanel">
+    <summary>My 1RMs <span class="hint" style="font-weight:400;font-size:.85rem;color:var(--muted);margin-left:auto;margin-right:10px">sets every target weight</span></summary>
+    <div class="pbody">
+      <div class="onerm" id="onermGrid"></div>
+      <p>Target weight = percent × your 1RM, rounded to 5 lb. These start at the example numbers in your spreadsheet, so replace them with your real maxes.</p>
+    </div>
+  </details>
+  <details class="panel" id="bodyPanel">
+    <summary>Body weight</summary>
+    <div class="pbody" id="bodyBody"></div>
+  </details>
+  <details class="panel" id="aboutPanel">
+    <summary>Program overview</summary>
+    <div class="pbody">
+      <p><strong>8-Week Strength + Cut.</strong> 200 → 188 lb, bigger squat and power clean, glute growth. 4 required days + 1 optional, 75 minutes or less each.</p>
+      <h4>Weekly layout</h4>
+      <ul>
+        <li><b>Day 1</b> Hang power clean speed EMOM, back squat, glute tri-set, short WOD</li>
+        <li><b>Day 2</b> Heavy power clean, clean pulls, bench and upper, arms, WOD</li>
+        <li><b>Day 3</b> Glute and posterior chain, leg curls, arm superset, intervals</li>
+        <li><b>Day 4</b> Clean complex, front squat, lunge and leg-curl superset, longer WOD</li>
+        <li><b>Day 5 (optional)</b> Clean technique, power snatch, hamstrings and arms, Zone 2</li>
+      </ul>
+      <h4>Phases</h4>
+      <ul>
+        <li><b>Weeks 1–3 Build:</b> volume at 70–79%</li>
+        <li><b>Week 4 Deload:</b> lighter, recover, keep the cut going</li>
+        <li><b>Weeks 5–7 Intensify:</b> heavier triples and doubles at 80–90%</li>
+        <li><b>Week 8 Test:</b> power clean 1RM (Day 1), benchmark WOD retest (Day 2), back squat 1RM (Day 4)</li>
+      </ul>
+      <h4>Nutrition for −12 lb in 8 weeks</h4>
+      <ul>
+        <li><b>Deficit:</b> about 750 kcal below maintenance (1.5 lb a week)</li>
+        <li><b>Start at:</b> about 2,300–2,400 kcal a day, then adjust after 2 weeks of weigh-ins</li>
+        <li><b>Protein:</b> 180–200 g a day. This is the biggest lever for keeping strength and building glutes in a deficit.</li>
+        <li><b>Carbs:</b> most of them before and after training; higher on Days 1, 2 and 4</li>
+        <li><b>Adjust:</b> losing under 1 lb a week for 2 weeks, cut about 150 kcal. Losing over 2 lb a week or lifts stalling hard, add about 150 kcal.</li>
+      </ul>
+      <p>RPE is effort out of 10 (8 means 2 reps left). No running and no wall balls: swap any cardio piece freely between row, bike and ski. Keep cleans and snatches in WODs at 65% or lower so fatigue doesn't groove bad technique. Abs every day, 5–6 minutes after the WOD.</p>
+    </div>
+  </details>
+  <ul class="legend" id="legend"></ul>
+  <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+  <div class="grid" id="grid" role="grid"></div>
+  <p class="sync" id="sync"></p>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- Program (from 8-Week Squat Clean Cut Program.xlsx) ---------- */
+const PROGRAM = {"weeks":{"1":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Back Squat","sets":5,"reps":"5","pct":70,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"lift","block":"B","name":"Hang Power Clean","sets":6,"reps":"2","cue":"above knee","tag":"EMOM","pct":65,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"AMRAP 10","body":"5 hang power snatches (95), 8 box jumps (24\"), 10 KB swings (70)","text":"AMRAP 10: 5 hang power snatches (95), 8 box jumps (24\"), 10 KB swings (70)","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"10–12","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"30 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":6,"reps":"3","pct":70,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"B","name":"Clean Pull","sets":4,"reps":"3","pct":95,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":4,"reps":"6","pct":72,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"4 Rounds for Time","body":"400m Run, 20 KB Swings, 15 Goblet Squat, 10 Thruster","text":"4 Rounds for Time: 400m Run, 20 KB Swings, 15 Goblet Squat, 10 Thruster","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"10/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"10","effort":"RPE 7","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"8","pct":60,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"For Time","body":"400m Run, 30 Reverse Lunges, 400m Run, 30 Jump Lunges, 400m Run, 30 Walking Lunges, 400m Run, 30 Overhead Lunges","text":"For Time: 400m Run, 30 Reverse Lunges, 400m Run, 30 Jump Lunges, 400m Run, 30 Walking Lunges, 400m Run, 30 Overhead Lunges","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"8–10","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"30 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":5,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":65,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":4,"reps":"6","pct":65,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"BENCHMARK (cap 15)","body":"21-15-9 power cleans (135) + bar-facing burpees — record time, retest Wk 8","text":"BENCHMARK (cap 15): 21-15-9 power cleans (135) + bar-facing burpees — record time, retest Wk 8","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"30 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"8/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"8–10","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"2":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":6,"reps":"2","cue":"above knee","tag":"EMOM","pct":68,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":5,"reps":"5","pct":74,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"4 RFT (cap 14)","body":"8 power snatches (95), 12 DB goblet squats (60), 9 burpee box jumps","text":"4 RFT (cap 14): 8 power snatches (95), 12 DB goblet squats (60), 9 burpee box jumps","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"10–12","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"30 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":6,"reps":"3","pct":73,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"B","name":"Clean Pull","sets":4,"reps":"3","pct":100,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":4,"reps":"5","pct":75,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"EMOM 14 alternating","body":"3 squat cleans (155) / 12 cal bike","text":"EMOM 14 alternating: 3 squat cleans (155) / 12 cal bike","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"10/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"10","effort":"RPE 8","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"8","pct":62,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"Every 3:00 × 5","body":"250 m row sprint + 8 DB hang clean & jerks (2×40)","text":"Every 3:00 × 5: 250 m row sprint + 8 DB hang clean & jerks (2×40)","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"8–10","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"30 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":5,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":68,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":4,"reps":"5","pct":70,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"AMRAP 18","body":"5 hang power cleans (155), 5 pull-ups, 10 alt DB snatches (50), 10 cal bike","text":"AMRAP 18: 5 hang power cleans (155), 5 pull-ups, 10 alt DB snatches (50), 10 cal bike","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"30 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"8/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"8–10","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"3":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":6,"reps":"2","cue":"above knee","tag":"EMOM","pct":70,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":5,"reps":"4","pct":78,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"AMRAP 12","body":"Bear complex ×2 (power clean → front squat → push press → back squat → push press) @ 95–115 + 8 lateral burpees over bar","text":"AMRAP 12: Bear complex ×2 (power clean → front squat → push press → back squat → push press) @ 95–115 + 8 lateral burpees over bar","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"10–12","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"30 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":7,"reps":"2","pct":77,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"B","name":"Clean Pull","sets":4,"reps":"3","pct":105,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":4,"reps":"4","pct":79,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"For time (cap 8)","body":"30 clean & jerks (135) — \"Grace\"","text":"For time (cap 8): 30 clean & jerks (135) — \"Grace\"","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"10/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"8","effort":"RPE 8","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"8","pct":65,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"Every 2:00 × 6","body":"6 alt DB snatches (50) + 6 DB hang cleans (2×40) + 8 cal bike","text":"Every 2:00 × 6: 6 alt DB snatches (50) + 6 DB hang cleans (2×40) + 8 cal bike","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"8–10","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"30 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":5,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":71,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":4,"reps":"4","pct":75,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"3 RFT (cap 20)","body":"20 cal row, 12 hang power snatches (85), 10 box jump-overs, 8 squat cleans (135)","text":"3 RFT (cap 20): 20 cal row, 12 hang power snatches (85), 10 box jump-overs, 8 squat cleans (135)","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"30 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"8/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"8–10","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"4":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":5,"reps":"2","cue":"above knee","tag":"EMOM","pct":60,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":3,"reps":"5","pct":65,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 7","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"DELOAD — 3 rounds easy","body":"5 hang power snatches (65), 10 KB swings, 10 walking lunges","text":"DELOAD — 3 rounds easy: 5 hang power snatches (65), 10 KB swings, 10 walking lunges","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":2,"reps":"10–12","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":2,"reps":"30 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":5,"reps":"2","pct":65,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"B","name":"Clean Pull","sets":3,"reps":"3","pct":85,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":3,"reps":"5","pct":65,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 7","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 7","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"DELOAD — EMOM 10","body":"2 power cleans @60% + 6 burpees","text":"DELOAD — EMOM 10: 2 power cleans @60% + 6 burpees","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":2,"reps":"12–15","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":2,"reps":"10/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":3,"reps":"10","effort":"RPE 6","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"8","pct":55,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 7","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 7","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 7","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"DELOAD — EMOM 12 easy","body":"alternate 10 cal bike / 8 light alt DB snatches","text":"DELOAD — EMOM 12 easy: alternate 10 cal bike / 8 light alt DB snatches","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":2,"reps":"8–10","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":2,"reps":"30 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":4,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":60,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":3,"reps":"5","pct":60,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 7","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 7","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"DELOAD — AMRAP 15 smooth","body":"5 power cleans (115), 10 cal row, 10 DB thrusters (2×35)","text":"DELOAD — AMRAP 15 smooth: 5 power cleans (115), 10 cal row, 10 DB thrusters (2×35)","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":2,"reps":"30 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":2,"reps":"8/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":5,"reps":"2","cue":"bar just above knee","effort":"RPE 6","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 6","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":2,"reps":"8–10","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":2,"reps":"40 m/side","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"5":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":5,"reps":"2","cue":"above knee","tag":"EMOM","pct":72,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":5,"reps":"3","pct":82,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"AMRAP 8","body":"6 squat cleans (135), 9 burpees","text":"AMRAP 8: 6 squat cleans (135), 9 burpees","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"45 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":6,"reps":"2","pct":80,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"A2","name":"Power Clean — heavy single","sets":1,"reps":"1","pct":88,"lift":"Power Clean","coach":"After the A sets, 2:30 rest. Practice near-max reps before the test"},{"kind":"lift","block":"B","name":"Clean Pull","sets":4,"reps":"2","pct":105,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":5,"reps":"3","pct":82,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"Every 2:00 × 6","body":"complex 1 power clean + 1 hang squat clean + 1 push jerk (155–175) + 6 bar-facing burpees","text":"Every 2:00 × 6: complex 1 power clean + 1 hang squat clean + 1 push jerk (155–175) + 6 bar-facing burpees","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"10–12 heavier","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"12/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"8","effort":"RPE 8","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"6","pct":68,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"4 × (4:00 on / 2:00 off) AMRAP","body":"10 alt DB snatches (50), 10 KB swings, 8 cal row","text":"4 × (4:00 on / 2:00 off) AMRAP: 10 alt DB snatches (50), 10 KB swings, 8 cal row","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"10–12","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"45 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":5,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":74,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":5,"reps":"3","pct":78,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"Chipper (cap 20)","body":"40 cal bike, 30 power snatches (75), 20 pull-ups, 20 DB box step-overs, 10 squat cleans (155)","text":"Chipper (cap 20): 40 cal bike, 30 power snatches (75), 20 pull-ups, 20 DB box step-overs, 10 squat cleans (155)","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"40 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"10/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"10–12","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side heavier","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"6":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":5,"reps":"2","cue":"above knee","tag":"EMOM","pct":74,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":4,"reps":"3","pct":85,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"3 RFT (cap 12)","body":"12 DB walking lunges (2×50), 10 hang power cleans (135), 12 cal row","text":"3 RFT (cap 12): 12 DB walking lunges (2×50), 10 hang power cleans (135), 12 cal row","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"45 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":5,"reps":"2","pct":84,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"A2","name":"Power Clean — heavy single","sets":1,"reps":"1","pct":91,"lift":"Power Clean","coach":"After the A sets, 2:30 rest. Practice near-max reps before the test"},{"kind":"lift","block":"B","name":"Clean Pull","sets":4,"reps":"2","pct":110,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":4,"reps":"3","pct":85,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"For time (cap 7)","body":"30 snatches (95–115) — \"Isabel\"","text":"For time (cap 7): 30 snatches (95–115) — \"Isabel\"","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"10–12 heavier","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"12/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"6","effort":"RPE 8–9","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"6","pct":70,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"10 rounds every 2:00","body":"30 s max cal bike → 5 DB hang snatches/arm (50)","text":"10 rounds every 2:00: 30 s max cal bike → 5 DB hang snatches/arm (50)","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"10–12","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"45 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":4,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":77,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":4,"reps":"3","pct":82,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"AMRAP 20","body":"3 squat cleans (165), 6 toes-to-bar, 9 alt DB snatches (50), 12 cal row","text":"AMRAP 20: 3 squat cleans (165), 6 toes-to-bar, 9 alt DB snatches (50), 12 cal row","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"40 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"10/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"10–12","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side heavier","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"7":{"1":{"n":1,"focus":"Clean Speed + Squat + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"lift","block":"A","name":"Hang Power Clean","sets":4,"reps":"2","cue":"above knee","tag":"EMOM","pct":75,"lift":"Power Clean","coach":"1 set every minute. Speed work: violent hip extension, fast elbows. Never grind"},{"kind":"lift","block":"B","name":"Back Squat","sets":3,"reps":"2","pct":89,"lift":"Back Squat","coach":"2:30–3:00 rest. Brace, hips & chest rise together"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":3,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":3,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":3,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"EMOM 12","body":"min 1 – snatch complex ×2 (power snatch + overhead squat) @ 95–115 · min 2 – 12 cal bike · min 3 – 10 burpees","text":"EMOM 12: min 1 – snatch complex ×2 (power snatch + overhead squat) @ 95–115 · min 2 – 12 cal bike · min 3 – 10 burpees","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":3,"reps":"12–15","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":3,"reps":"45 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"HEAVY Power Clean + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"A","name":"Power Clean","sets":6,"reps":"1","pct":88,"lift":"Power Clean","coach":"2:00 rest. Every rep crisp — drop weight if you start muscling it"},{"kind":"lift","block":"B","name":"Clean Pull","sets":3,"reps":"2","pct":110,"lift":"Power Clean","coach":"90 s rest. Same start position as your clean; full extension + shrug, bar close. Builds pull strength past your clean max"},{"kind":"lift","block":"C","name":"Bench Press","sets":3,"reps":"2","pct":88,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"21-15-9 (cap 10)","body":"hang power cleans (135) + chest-to-bar pull-ups","text":"21-15-9 (cap 10): hang power cleans (135) + chest-to-bar pull-ups","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":3,"reps":"10–12 heavier","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":3,"reps":"12/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":4,"reps":"6","effort":"RPE 9","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"6","pct":72,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"5 rounds, 1:30 rest","body":"300 m row + 6 power cleans (155)","text":"5 rounds, 1:30 rest: 300 m row + 6 power cleans (155)","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":3,"reps":"10–12","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":3,"reps":"45 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Clean Complex + Front Squat + WOD","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"lift","block":"A","name":"Clean Complex","sets":4,"reps":"1+1+1","cue":"power clean + hang power clean + front squat","pct":79,"lift":"Power Clean","coach":"1 complex = 1 set, 2:00 rest. Don't drop between reps. Teaches the catch & rack under fatigue"},{"kind":"lift","block":"B","name":"Front Squat","sets":3,"reps":"2","pct":85,"lift":"Front Squat","coach":"2:30 rest. Elbows high — a stronger front squat = a more confident catch"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Deficit Reverse Lunge","sets":3,"reps":"10/leg","cue":"DB, front foot on 2–4\" plate","effort":"RPE 8","coach":"Superset C1/C2, 90 s rest. Long step back, torso leaned forward = glute stretch"},{"kind":"lift","block":"C2","name":"Seated Leg Curl","sets":3,"reps":"12–15","effort":"RPE 9","coach":"Lean torso forward for a deeper hamstring stretch; last set drop-set (wk 5–7)"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"For time (cap 20)","body":"1,000 m row, 30 clean & jerks (115), 30 pull-ups, 30 power snatches (75)","text":"For time (cap 20): 1,000 m row, 30 clean & jerks (115), 30 pull-ups, 30 power snatches (75)","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":3,"reps":"40 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":3,"reps":"10/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"warmup","block":"Warm-up","text":"Empty bar: 3×3 tall cleans, 3×3 muscle cleans, 3×3 clean high-pulls"},{"kind":"lift","block":"A","name":"Power Clean from Blocks/Hang","sets":6,"reps":"2","cue":"bar just above knee","effort":"RPE 7","coach":"90 s rest. Technique only — fast feet, punch elbows, stick the landing"},{"kind":"lift","block":"B","name":"Power Snatch","sets":4,"reps":"2","effort":"RPE 7","coach":"Speed & turnover. 90 s rest"},{"kind":"lift","block":"C","name":"Single-leg RDL","sets":3,"reps":"10/leg","cue":"DB/KB","effort":"RPE 7","coach":"Slow lowering, hips square"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Incline DB Curl","sets":3,"reps":"12","effort":"RPE 9","coach":"Superset D1/D2/D3, 45 s rest. Arms hang back = biceps stretch"},{"kind":"lift","block":"D2","name":"EZ-bar Skull Crusher","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Lower to behind the head, elbows in"},{"kind":"lift","block":"D3","name":"Nordic Curl or Glute-Ham Raise","sets":3,"reps":"5","cue":"eccentric","effort":"RPE 8","coach":"5-sec lowering; use a band to assist if needed"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"cardio","block":"E","name":"Zone 2 row / bike / incline walk","dur":"30–40 min","effort":"Conversational pace","coach":"Biggest calorie burn with least recovery cost"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":3,"reps":"10–12","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":3,"reps":"40 m/side heavier","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}},"8":{"1":{"n":1,"focus":"Power Clean TEST + Glutes","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 tall/muscle cleans (empty bar)"},{"kind":"test","block":"A","name":"Power Clean","text":"","coach":"Fresh after the rest day. Singles at ~75/82/88/93/97%, then 1–2 PR attempts. 2–3 min rest. Stop when bar speed under the bar breaks down","lift":null},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"Bulgarian Split Squat","sets":2,"reps":"10/leg","cue":"DB, slight forward lean","effort":"RPE 8","coach":"Forward lean = more glute"},{"kind":"lift","block":"C2","name":"45° Back Extension","sets":2,"reps":"15","cue":"glute-biased, rounded upper back","effort":"Add load when easy","coach":"Tri-set C1/C2/C3, 60 s rest"},{"kind":"lift","block":"C3","name":"B-Stance Hip Thrust","sets":2,"reps":"12/side","cue":"DB or barbell","effort":"RPE 8","coach":"Lead heel drives, back foot just for balance"}],"label":"TRI-SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"6 min easy bike flush after the test","body":"","text":"6 min easy bike flush after the test","coach":"Keep WOD cleans/snatches ≤65% — crisp reps only"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hanging Knee → Leg Raise","sets":2,"reps":"10–12","coach":"Superset Abs1/Abs2, 45 s rest. No swinging; curl pelvis up"},{"kind":"lift","block":"Abs2","name":"RKC Plank","sets":2,"reps":"30 s","coach":"Squeeze glutes & quads, pull elbows to toes"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"2":{"n":2,"focus":"Benchmark Retest + Upper","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press) + 3×3 light clean pulls"},{"kind":"lift","block":"C","name":"Bench Press","sets":3,"reps":"3","pct":75,"lift":"Bench Press","coach":"2:00 rest"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Strict / Weighted Pull-ups","sets":3,"reps":"6–8","effort":"RPE 8","coach":"Superset D1/D2/D3"},{"kind":"lift","block":"D2a","sets":3,"cue":"superset","effort":"RPE 9","coach":"Arm finisher, 45 s rest. Last set: drop-set both","name":"EZ-bar Curl","reps":"10–12"},{"kind":"lift","block":"D2b","sets":3,"cue":"superset","effort":"RPE 9","coach":"","name":"Rope Pushdown","reps":"12–15"},{"kind":"lift","block":"D3","name":"Cable Pull-through","sets":3,"reps":"15","effort":"RPE 8","coach":"Hinge, squeeze glutes to stand"}],"label":"GIANT SET","howto":"Rotate through each exercise, then repeat"},{"kind":"wod","block":"WOD","head":"RETEST BENCHMARK (cap 15)","body":"21-15-9 power cleans (135) + bar-facing burpees — beat Wk 1","text":"RETEST BENCHMARK (cap 15): 21-15-9 power cleans (135) + bar-facing burpees — beat Wk 1","coach":"Record score to compare"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Kneeling Cable Crunch","sets":2,"reps":"12–15","coach":"Superset Abs1/Abs2. Crunch ribs to hips, don't sit back"},{"kind":"lift","block":"Abs2","name":"Pallof Press","sets":2,"reps":"10/side","coach":"Anti-rotation — braces the trunk for heavy cleans"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"3":{"n":3,"focus":"Glutes / Posterior Chain","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"5 min bike + 2×15 banded glute bridges + 2×10 banded lateral walks/side"},{"kind":"lift","block":"A","name":"Barbell Hip Thrust","sets":3,"reps":"8","effort":"RPE 7","coach":"2:00 rest. 1-sec squeeze at top, ribs down, chin tucked"},{"kind":"lift","block":"B","name":"Clean-grip Romanian Deadlift","sets":3,"reps":"6","pct":60,"lift":"Deadlift","coach":"2:00 rest. 3-sec lowering, lats tight, bar against thighs — same back angle as your clean pull"},{"kind":"group","block":"C","items":[{"kind":"lift","block":"C1","name":"DB Step-ups","sets":3,"reps":"10/leg","cue":"high box, no push off back foot","effort":"RPE 8","coach":"Superset C1/C2"},{"kind":"lift","block":"C2","name":"Cable Kickback","sets":3,"reps":"15/leg","effort":"RPE 9","coach":"60 s rest"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"D","items":[{"kind":"lift","block":"D1","name":"Lying Leg Curl","sets":3,"reps":"10–12","effort":"RPE 9","coach":"Superset D1/D2. 3-sec lowering, point toes down for more hamstring"},{"kind":"lift","block":"D2","name":"Seated Banded/Machine Abduction burnout","sets":2,"reps":"30","effort":"RPE 9","coach":"Lean forward slightly for upper glute"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"group","block":"E","items":[{"kind":"lift","block":"E1","name":"Hammer Curl","sets":3,"reps":"10–12","cue":"DB","effort":"RPE 9","coach":"Superset E1/E2, 45 s rest"},{"kind":"lift","block":"E2","name":"Overhead Cable Triceps Extension","sets":3,"reps":"12–15","cue":"rope","effort":"RPE 9","coach":"Full stretch behind head — long head = arm size"}],"label":"SUPERSET","howto":"Go back and forth: one set of each, then repeat"},{"kind":"wod","block":"WOD","head":"15 min Zone 2 row","body":"","text":"15 min Zone 2 row","coach":"This is the fat-loss engine — push the work intervals"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Ab Wheel Rollout","sets":2,"reps":"8–10","cue":"kneeling","coach":"Superset Abs1/Abs2. Ribs down, stop before low back sags"},{"kind":"lift","block":"Abs2","name":"Side Plank","sets":2,"reps":"30 s/side","coach":"Hips high, straight line"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"4":{"n":4,"focus":"Back Squat TEST","optional":false,"items":[{"kind":"warmup","block":"Warm-up","text":"8–10 min: easy row/bike, hip & ankle mobility, empty-bar complex (3 RDL, 3 hang clean, 3 front squat, 3 press)"},{"kind":"test","block":"A","name":"Back Squat","text":"","coach":"Singles at ~80/87/92/96% then 1–2 PR attempts, 3–4 min rest","lift":null},{"kind":"wod","block":"WOD","head":"8 min easy bike flush after the test","body":"","text":"8 min easy bike flush after the test","coach":"Easy flush"},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Hollow Hold","sets":2,"reps":"30 s","coach":"Superset Abs1/Abs2. Low back glued to floor"},{"kind":"lift","block":"Abs2","name":"Weighted Dead Bug","sets":2,"reps":"8/side","cue":"light DB/plate","coach":"Slow, exhale fully each rep"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]},"5":{"n":5,"focus":"Clean Technique + Zone 2","optional":true,"items":[{"kind":"note","block":"Note","text":"Optional: 30–40 min Zone 2 row/bike only. Celebrate the PRs."},{"kind":"group","block":"Abs","items":[{"kind":"lift","block":"Abs1","name":"Toes-to-Bar","sets":2,"reps":"8–10","cue":"or hanging leg raise","coach":"Superset Abs1/Abs2. Strict-ish, control the swing"},{"kind":"lift","block":"Abs2","name":"Suitcase Carry","sets":2,"reps":"40 m/side","cue":"heavy DB/KB","coach":"Anti-lean, walk tall — great for clean rack stability"}],"label":"ABS FINISHER","howto":"Go back and forth: one set of each, then repeat"}]}}},"phases":{"1":"Build","2":"Build","3":"Build","4":"DELOAD","5":"Intensify","6":"Intensify","7":"Intensify — heaviest week","8":"TEST WEEK"},"onerm":{"Back Squat":315,"Front Squat":265,"Power Clean":225,"Bench Press":245,"Deadlift":385}};
+const NWEEKS = 8;
+const LIFTS = ["Back Squat","Front Squat","Power Clean","Bench Press","Deadlift"];
+const COLORS = {1:"--red",2:"--blue",3:"--green",4:"--yellow",5:"--run"};
+const SHORTS = {1:"Squat",2:"Upper",3:"Glutes",4:"Complex",5:"Tech"};
+const LONGS = {1:"Clean speed + squat + glutes",2:"Heavy power clean + upper",3:"Glutes / posterior chain",4:"Clean complex + front squat",5:"Clean technique + Zone 2"};
+const SHORTS8 = {1:"PC Test",2:"Retest",4:"SQ Test"};
+const shortOf = (wk,n)=> (wk===NWEEKS && SHORTS8[n]) || SHORTS[n];
+// Cycle from the start date: Day 1, Day 2, rest, Day 3, Day 4, Day 5 (optional), rest
+const CYCLE = [1,2,0,3,4,5,0];
+const COMMON = ["Back Squat","Front Squat","Goblet Squat","Leg Press","Hack Squat","Belt Squat","Safety Bar Squat","Romanian Deadlift","Trap Bar Deadlift","Deadlift","Good Morning","Barbell Hip Thrust","Glute Bridge","Walking Lunge","Reverse Lunge","Split Squat","Leg Extension","Lying Leg Curl","Seated Leg Curl","Calf Raise","Bench Press","Incline Bench Press","Dumbbell Bench Press","Incline DB Press","Push-ups","Overhead Press","Push Press","Seated DB Press","Lateral Raise","Pull-ups","Chin-ups","Lat Pulldown","Barbell Row","Dumbbell Row","Chest Supported Row","Seated Cable Row","Face Pull","Barbell Curl","Dumbbell Curl","Preacher Curl","Triceps Pushdown","Skull Crusher","Dips","Hanging Leg Raise","Cable Crunch","Plank","Ab Wheel Rollout","Rowing Machine","Assault Bike","Ski Erg","Sled Push","Farmer Carry"];
+
+const REST = {rest:true, short:"Rest", session:"Rest day"};
+const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const isTraining = p => p && !p.rest && !p.pre;
+let START = null;                      // "YYYY-MM-DD"
+let MOVES = {};                        // { "2026-11-04": "2026-11-03" } = this date shows the plan of that date
+let OVR = {};                          // exercise changes: { "d1_A":[{from,to,data}] }
+let ONERM = Object.assign({}, PROGRAM.onerm);
+let BODY = {start:200, goal:188, weeks:{}};
+const dayNum = d => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/86400000;
+function basePlan(date){
+  if(!START) return {pre:true};
+  const diff = dayNum(date) - dayNum(parseKey(START));
+  if(diff < 0) return {pre:true};
+  const ci = diff % 7, week = Math.floor(diff/7)+1;
+  if(week > NWEEKS) return {rest:true, ended:true, ci, week, short:"Done", session:"Program complete"};
+  const n = CYCLE[ci];
+  if(!n) return Object.assign({ci, week}, REST);
+  const D = PROGRAM.weeks[week][n];
+  return {ci, week, n, session:D.focus, short:shortOf(week,n), color:COLORS[n], optional:D.optional, items:D.items, phase:PROGRAM.phases[week]};
+}
+function planFor(date){
+  const base = basePlan(date);
+  if(base.pre) return base;
+  const src = MOVES[keyOf(date)];
+  if(src && src !== keyOf(date)){
+    const sp = basePlan(parseKey(src));
+    if(!sp.pre) return Object.assign({}, sp, {movedFrom: src});
+  }
+  return base;
+}
+
+function parseKey(k){ const [y,m,d]=k.split("-").map(Number); return new Date(y,m-1,d); }
+const pad2 = n => String(n).padStart(2,"0");
+const keyOf = d => d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ---------- Exercise changes (overrides) ---------- */
+// A change is tied to the original exercise (not its position), since blocks are lettered differently from week to week.
+// WODs, warm-ups and notes differ every week, so their changes only ever apply to one day.
+const slotOf = (n, it) => "d"+n+"_"+(it.kind==="lift" ? slug(it.name) : it.kind==="cardio" ? "cardio-"+slug(it.name) : it.kind==="test" ? "test-"+slug(it.name) : it.kind);
+const repeats = it => it.kind==="lift" || it.kind==="cardio";
+function ovFor(slot, week){
+  const list = OVR[slot] || [];
+  for(let i=list.length-1;i>=0;i--){ const o=list[i]; if(week>=o.from && week<=o.to) return o.data; }
+  return null;
+}
+function subtractRange(list, a, b){
+  const out = [];
+  for(const o of list){
+    if(o.to < a || o.from > b){ out.push(o); continue; }
+    if(o.from < a) out.push({from:o.from, to:a-1, data:o.data});
+    if(o.to > b) out.push({from:b+1, to:o.to, data:o.data});
+  }
+  return out;
+}
+function setOverride(slot, week, scope, data){
+  const to = scope==="later" ? 99 : week;
+  const list = subtractRange(OVR[slot]||[], week, to);
+  list.push({from:week, to, data});
+  OVR[slot] = list; saveOvr();
+}
+function clearOverride(slot, week, scope){
+  const to = scope==="later" ? 99 : week;
+  const list = subtractRange(OVR[slot]||[], week, to);
+  if(list.length) OVR[slot] = list; else delete OVR[slot];
+  saveOvr();
+}
+function applyOv(item, n, week){
+  const slot = slotOf(n, item), o = ovFor(slot, week);
+  const base = Object.assign({}, item, {_slot:slot, _n:n});
+  if(!o) return base;
+  const m = Object.assign(base, o, {_orig:item, _edited:true, _removed: !!o.removed});
+  if(item.kind==="wod") m.text = m.head + (m.body ? ": "+m.body : "");
+  return m;
+}
+function effItems(plan){
+  return (plan.items||[]).map(it=>{
+    if(it.kind==="group"){
+      const g = Object.assign({}, it, {_slot:null});
+      g.items = it.items.map(m=> applyOv(m, plan.n, plan.week));
+      return g;
+    }
+    return applyOv(it, plan.n, plan.week);
+  });
+}
+const COUNTED = new Set(["lift","group","wod","test","cardio"]);
+function countable(plan){
+  return effItems(plan).filter(it=> COUNTED.has(it.kind) && !it._removed)
+    .map(it=> it.kind==="group" ? Object.assign({}, it, {items: it.items.filter(m=>!m._removed)}) : it)
+    .filter(it=> it.kind!=="group" || it.items.length);
+}
+function itemId(ci, it){
+  switch(it.kind){
+    case "group": return "d"+ci+"-grp_"+it.block;
+    case "wod": return "d"+ci+"-wod-d"+it._n+"_WOD";
+    case "warmup": return "d"+ci+"-warmup_W";
+    case "note": return "d"+ci+"-note_N";
+    default: return "d"+ci+"-"+slug(it.name)+"_"+it.block;
+  }
+}
+const targetWt = it => {
+  const rm = Number(ONERM[it.lift]);
+  return (it.lift && it.pct && rm>0) ? Math.round(rm*it.pct/100/5)*5 : null;
+};
+
+/* ---------- Storage: account sync if available, else this browser ---------- */
+let LOG = {};
+let db = null;
+const LS_KEY = "cut-program-log";
+const lsGet = (k, d) => { try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } };
+const lsSet = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+LOG = lsGet(LS_KEY, {}) || {};
+try{ START = localStorage.getItem(LS_KEY+"-start") || null; }catch(e){}
+MOVES = lsGet(LS_KEY+"-moves", {}) || {};
+OVR = lsGet(LS_KEY+"-swaps", {}) || {};
+ONERM = Object.assign(ONERM, lsGet(LS_KEY+"-onerm", {}) || {});
+BODY = Object.assign(BODY, lsGet(LS_KEY+"-body", {}) || {});
+const syncEl = document.getElementById("sync");
+syncEl.textContent = "Saved on this device.";
+const pending = new Set(); const timers = {};
+
+/* one write at a time per settings doc, always writing the latest value */
+const Q = {};
+function saveDoc(path, ls, field, getVal){
+  if(ls) lsSet(ls, getVal());
+  if(!db) return;
+  const q = Q[path] ??= {run:false, dirty:false};
+  q.dirty = true;
+  if(q.run) return;
+  (async ()=>{
+    q.run = true;
+    while(q.dirty){
+      q.dirty = false;
+      try{ await db.doc(path).set({[field]: clone(getVal())}); }
+      catch(e){ syncEl.textContent = "Couldn't sync; saving on this device."; }
+    }
+    q.run = false;
+  })();
+}
+const busy = p => !!(Q[p] && (Q[p].run || Q[p].dirty));
+function watchDoc(path, ls, field, cur, apply){
+  db.doc(path).onSnapshot(snap=>{
+    if(busy(path) || !snap.exists) return;
+    const v = clone(snap.data()?.[field] ?? null);
+    if(v === null || JSON.stringify(v) === JSON.stringify(cur())) return;
+    apply(v); lsSet(ls, v);
+  }, ()=>{});
+}
+const saveMoves = () => saveDoc("settings/moves", LS_KEY+"-moves", "map", ()=>MOVES);
+const saveOvr = () => saveDoc("settings/swaps", LS_KEY+"-swaps", "map", ()=>OVR);
+const saveOnerm = () => saveDoc("settings/oneRM", LS_KEY+"-onerm", "values", ()=>ONERM);
+const saveBody = () => saveDoc("settings/weights", LS_KEY+"-body", "data", ()=>BODY);
+
+(async ()=>{
+  try{
+    if(!window.claude || !window.claude.use) return;
+    db = await window.claude.use("db");
+    if(!db) return;
+    syncEl.textContent = "Syncing…";
+    db.collection("log").onSnapshot(snap=>{
+      const fresh = {};
+      snap.docs.forEach(d=>{ if(d.exists) fresh[d.id]=JSON.parse(JSON.stringify(d.data()||{})); });
+      for(const k in LOG){ if(pending.has(k)) fresh[k]=LOG[k]; }
+      LOG = fresh; saveLocal();
+      syncEl.textContent = "Synced to your account.";
+      renderGrid();
+      if(openKey && !document.activeElement?.matches?.(".sheet input, .sheet textarea, .sheet select")) keepScroll(renderSheet);
+    }, ()=>{ syncEl.textContent = "Couldn't sync; saving on this device."; db=null; });
+    db.doc("settings/program").onSnapshot(snap=>{
+      const v = snap.exists ? snap.data().startDate : null;
+      if(v && v!==START){ START=v; try{localStorage.setItem(LS_KEY+"-start",v);}catch(e){} syncStartInput(); renderGrid(); if(openKey) keepScroll(renderSheet); }
+    }, ()=>{});
+    const refresh = ()=>{ renderGrid(); if(openKey && !document.activeElement?.matches?.(".sheet input, .sheet textarea, .sheet select")) keepScroll(renderSheet); };
+    watchDoc("settings/moves", LS_KEY+"-moves", "map", ()=>MOVES, v=>{ MOVES=v; refresh(); });
+    watchDoc("settings/swaps", LS_KEY+"-swaps", "map", ()=>OVR, v=>{ OVR=v; refresh(); });
+    watchDoc("settings/oneRM", LS_KEY+"-onerm", "values", ()=>ONERM, v=>{ ONERM=Object.assign({}, PROGRAM.onerm, v); renderOnerm(); refresh(); });
+    watchDoc("settings/weights", LS_KEY+"-body", "data", ()=>BODY, v=>{ BODY=Object.assign({start:200,goal:188,weeks:{}}, v); if(!document.activeElement?.closest?.("#bodyBody")) renderBody(); });
+  }catch(e){ db=null; }
+})();
+
+function saveLocal(){ lsSet(LS_KEY, LOG); }
+const inFlight = {}, dirty = {};
+function persist(dayKey, now){
+  saveLocal();
+  if(!db) return;
+  pending.add(dayKey); dirty[dayKey] = true;
+  clearTimeout(timers[dayKey]);
+  timers[dayKey] = setTimeout(()=> flush(dayKey), now ? 0 : 500);
+}
+async function flush(dayKey){
+  if(inFlight[dayKey] || !dirty[dayKey] || !db) return;
+  inFlight[dayKey] = true; dirty[dayKey] = false;
+  try{
+    await db.doc("log/"+dayKey).set(JSON.parse(JSON.stringify(LOG[dayKey]||{ex:{}})));
+    syncEl.textContent = "Synced to your account.";
+  }catch(e){
+    dirty[dayKey] = true;
+    syncEl.textContent = "Couldn't sync; saving on this device. Will retry on your next change.";
+  }
+  inFlight[dayKey] = false;
+  if(dirty[dayKey]) timers[dayKey] = setTimeout(()=> flush(dayKey), 1500);
+  else pending.delete(dayKey);
+}
+function setStart(v){
+  const rebased = START && v !== START && Object.keys(MOVES).length;
+  START = v || null;
+  if(rebased){ MOVES = {}; saveMoves(); }
+  try{ v ? localStorage.setItem(LS_KEY+"-start",v) : localStorage.removeItem(LS_KEY+"-start"); }catch(e){}
+  syncStartInput(); renderGrid();
+  saveDoc("settings/program", null, "startDate", ()=>START);
+}
+function entry(dayKey, id){
+  LOG[dayKey] ??= {ex:{}}; LOG[dayKey].ex ??= {};
+  const e = LOG[dayKey].ex[id] ??= {w:[], r:[], done:false};
+  e.w ??= []; e.r ??= [];
+  return e;
+}
+function progress(dayKey, plan){
+  const ex = LOG[dayKey]?.ex || {};
+  const items = countable(plan);
+  if(!items.length) return {n:0, total:0, pct:0};
+  const n = items.filter(x=> ex[itemId(plan.ci,x)]?.done).length;
+  return {n, total:items.length, pct: Math.round(n/items.length*100)};
+}
+
+/* ---------- Weight history ---------- */
+const exSlug = id => id.replace(/^d\d+-/,"").replace(/_[^_]*$/,"");
+const hasVal = v => v!==undefined && v!==null && String(v).trim()!=="";
+function historyFor(name){
+  const sl = slug(name), out = [];
+  for(const k in LOG){
+    const ex = LOG[k]?.ex || {};
+    for(const id in ex){
+      const e = ex[id];
+      if((e.extra ? slug(e.name||"")===sl : exSlug(id)===sl) && ((e.w||[]).some(hasVal) || hasVal(e.rounds) || hasVal(e.mins) || hasVal(e.miles) || hasVal(e.note) || hasVal(e.desc) || hasVal(e.score))) out.push({key:k, w:e.w||[], r:e.r||[], rounds:e.rounds, mins:e.mins, miles:e.miles, note:e.note, desc:e.desc, score:e.score});
+    }
+  }
+  return out.sort((a,b)=> a.key<b.key ? 1 : -1);   // newest first
+}
+const shortDate = k => parseKey(k).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+const topW = h => (h.w||[]).some(hasVal) ? Math.max(...h.w.filter(hasVal).map(Number).filter(n=>!isNaN(n))) : -Infinity;
+const setsText = h => h.w.map((w,i)=> hasVal(w) ? `${w}${hasVal(h.r[i]) ? " × "+h.r[i] : ""}` : null).filter(Boolean).join(", ");
+function spark(hist){
+  const pts = hist.slice().reverse().map(topW).filter(isFinite);
+  if(pts.length < 2) return "";
+  const W=280,H=56,P=6, lo=Math.min(...pts), hi=Math.max(...pts), span=(hi-lo)||1;
+  const xy = pts.map((v,i)=>[P+i*(W-2*P)/(pts.length-1), H-P-(v-lo)/span*(H-2*P)]);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Top set weight over ${pts.length} sessions, from ${pts[0]} to ${pts[pts.length-1]} lb">
+    <polyline points="${xy.map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--c)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${xy.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--c)"/>`).join("")}</svg>`;
+}
+const openHist = new Set();
+let resetArmed = false;
+
+/* ---------- Workout timer ---------- */
+function fmtDur(ms){
+  const t = Math.max(0, Math.floor(ms/1000)), h=Math.floor(t/3600), m=Math.floor(t%3600/60), s=t%60;
+  return (h? h+":"+pad2(m) : m) + ":" + pad2(s);
+}
+function shortDur(ms){ const m=Math.round(ms/60000); return m>=60 ? Math.floor(m/60)+"h "+pad2(m%60)+"m" : m+"m"; }
+function timerOf(k){ return LOG[k]?.timer || {}; }
+let tick = null;
+
+/* ---------- Calendar ---------- */
+const today = new Date(); today.setHours(0,0,0,0);
+let view = new Date(today.getFullYear(), today.getMonth(), 1);
+const grid = document.getElementById("grid");
+
+function renderLegend(){
+  const ul = document.getElementById("legend"); ul.innerHTML="";
+  [1,2,3,4,5].forEach(n=>{
+    ul.insertAdjacentHTML("beforeend",`<li><span class="chip" style="background:var(${COLORS[n]})"></span>Day ${n}${n===5?" (optional)":""}: ${esc(LONGS[n])}</li>`);});
+  ul.insertAdjacentHTML("beforeend",`<li><span class="chip" style="border:2px dashed var(--rest)"></span>Rest</li>`);
+}
+
+function renderGrid(){
+  const y=view.getFullYear(), m=view.getMonth();
+  document.getElementById("monthTitle").innerHTML =
+    view.toLocaleString(undefined,{month:"long"}) + `<span>${y}</span>`;
+  grid.innerHTML="";
+  const first = new Date(y,m,1).getDay();
+  const days = new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++) grid.insertAdjacentHTML("beforeend",`<div class="day pad"></div>`);
+  for(let d=1; d<=days; d++){
+    const date = new Date(y,m,d), k = keyOf(date), plan = planFor(date);
+    const b = document.createElement("button");
+    b.className = "day" + (plan.pre? " pre" : isTraining(plan)? "" : " rest") + (date.getTime()===today.getTime()? " today":"");
+    b.dataset.key = k;
+    if(isTraining(plan)){
+      const p = progress(k,plan), tm = timerOf(k);
+      if(p.total && p.n===p.total) b.classList.add("complete");
+      b.style.setProperty("--c", `var(${plan.color})`);
+      b.style.setProperty("--p", p.pct);
+      b.innerHTML = `<span class="num">${d}</span><span class="plate" aria-hidden="true"></span><span class="label">${plan.movedFrom ? "↔ " : ""}${esc(plan.short)}${plan.optional ? " (opt)" : ""}${tm.start&&tm.end? `<em>${shortDur(tm.end-tm.start)}</em>` : tm.start? `<em class="live">In progress</em>`:""}</span>`;
+      b.setAttribute("aria-label", `${date.toDateString()}, ${plan.session}${plan.optional ? ", optional day" : ""}, ${p.n} of ${p.total} exercises done${plan.movedFrom ? ", moved from another day" : ""}`);
+    }else if(plan.pre){
+      b.innerHTML = `<span class="num">${d}</span>`;
+      b.setAttribute("aria-label", `${date.toDateString()}, before program start`);
+    }else{
+      const lbl = plan.ended ? "Done" : "Rest";
+      b.innerHTML = `<span class="num">${d}</span><span class="label">${plan.movedFrom ? "↔ " : ""}${lbl}</span>`;
+      b.setAttribute("aria-label", `${date.toDateString()}, ${plan.ended ? "program complete" : "rest day"}`);
+    }
+    b.addEventListener("click", ()=> openDay(k));
+    grid.appendChild(b);
+  }
+}
+
+/* ---------- Moving workouts between days ---------- */
+const dLabel = k => parseKey(k).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+function touched(k){
+  const d = LOG[k]; if(!d) return false;
+  if(d.timer?.start) return true;
+  return Object.values(d.ex||{}).some(e=> e && !e.extra && (e.done || (e.w||[]).some(hasVal) || (e.r||[]).some(hasVal)
+    || hasVal(e.rounds) || hasVal(e.mins) || hasVal(e.miles) || hasVal(e.note) || hasVal(e.desc) || hasVal(e.score)));
+}
+function movePreview(a, b){
+  if(!b) return {ok:false, text:"Pick a date."};
+  if(b===a) return {ok:false, text:"Pick a different day."};
+  const pa = planFor(parseKey(a)), pb = planFor(parseKey(b));
+  if(pb.pre) return {ok:false, text:`${dLabel(b)} is before your program starts.`};
+  if(pb.ended) return {ok:false, text:`${dLabel(b)} is after the 8 weeks end.`};
+  if(touched(a)) return {ok:false, text:`${dLabel(a)} already has logged work, so it can't be moved.`};
+  if(touched(b)) return {ok:false, text:`${dLabel(b)} already has logged work, so it can't be moved.`};
+  const ra = !isTraining(pa), rb = !isTraining(pb);
+  if(ra && rb) return {ok:false, text:"Both are rest days, so there's nothing to change."};
+  if(!ra && rb) return {ok:true, btn:"Move workout", text:`${pa.session} moves to ${dLabel(b)}, and ${dLabel(a)} becomes a rest day.`};
+  if(ra && !rb) return {ok:true, btn:"Move workout here", text:`${pb.session} moves here from ${dLabel(b)}, and ${dLabel(b)} becomes a rest day.`};
+  return {ok:true, btn:"Swap days", text:`${dLabel(a)} gets ${pb.session}, and ${dLabel(b)} gets ${pa.session}.`};
+}
+function setMove(k, src){ if(src===k) delete MOVES[k]; else MOVES[k]=src; }
+function swapDays(a, b){
+  const sa = MOVES[a] || a, sb = MOVES[b] || b;
+  setMove(a, sb); setMove(b, sa);
+  saveMoves();
+}
+let moveOpen = false, moveDate = "", toastT = null;
+function toast(msg){
+  const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on");
+  clearTimeout(toastT); toastT = setTimeout(()=> t.classList.remove("on"), 4000);
+}
+function moveBlock(k, plan){
+  const rest = !isTraining(plan);
+  if(!moveDate){ const d = parseKey(k); moveDate = keyOf(new Date(d.getFullYear(), d.getMonth(), d.getDate()+1)); }
+  const pv = movePreview(k, moveDate);
+  return `<div class="movewrap">
+    <div class="moverow">
+      <button class="movebtn" id="moveToggle" aria-expanded="${moveOpen}">${moveOpen ? "Cancel" : rest ? "⇄ Move a workout here" : "⇄ Move workout to another day"}</button>
+      ${plan.movedFrom ? `<button class="movebtn" id="moveUndo">Undo move</button>` : ""}
+    </div>
+    <div class="movepanel"${moveOpen ? "" : " hidden"}>
+      <label for="moveDate">${rest ? "Take the workout from" : "Move to"}</label>
+      <input type="date" id="moveDate" min="${START}" value="${moveDate}">
+      <p class="mvprev" id="movePreview" aria-live="polite">${esc(pv.text)}</p>
+      <button class="tbtn" id="moveGo"${pv.ok ? "" : " disabled"}>${esc(pv.btn || "Move workout")}</button>
+    </div></div>`;
+}
+function wireMove(k){
+  const tg = sheet.querySelector("#moveToggle"); if(!tg) return;
+  tg.addEventListener("click", ()=>{ moveOpen = !moveOpen; keepScroll(renderSheet); sheet.querySelector("#moveToggle")?.focus(); });
+  const inp = sheet.querySelector("#moveDate");
+  inp.addEventListener("input", ()=>{
+    moveDate = inp.value;
+    const pv = movePreview(k, moveDate), go = sheet.querySelector("#moveGo");
+    sheet.querySelector("#movePreview").textContent = pv.text;
+    go.disabled = !pv.ok; if(pv.btn) go.textContent = pv.btn;
+  });
+  sheet.querySelector("#moveGo").addEventListener("click", ()=>{
+    const pv = movePreview(k, moveDate); if(!pv.ok) return;
+    swapDays(k, moveDate);
+    moveOpen = false; moveDate = "";
+    closeDay(); toast(pv.text);
+  });
+  sheet.querySelector("#moveUndo")?.addEventListener("click", ()=>{
+    const j = Object.keys(MOVES).find(x=> MOVES[x]===k);     // the day now holding this date's original workout
+    if(!j) return;
+    if(touched(k) || touched(j)){ toast("Can't undo: one of those days already has logged work."); return; }
+    swapDays(k, j); moveOpen = false; moveDate = "";
+    closeDay(); toast("Move undone.");
+  });
+}
+
+/* ---------- Day sheet ---------- */
+const sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim");
+let openKey = null, lastFocus = null, editing = null;
+function keepScroll(fn){ const y=sheet.scrollTop; fn(); sheet.scrollTop=y; }
+
+function openDay(k){
+  lastFocus = document.activeElement; openKey = k; moveOpen = false; moveDate = ""; editing = null;
+  renderSheet(); sheet.scrollTop = 0;
+  sheet.classList.add("open"); scrim.classList.add("open");
+  document.body.style.overflow="hidden";
+  sheet.querySelector(".close").focus();
+}
+function closeDay(){
+  sheet.classList.remove("open"); scrim.classList.remove("open");
+  document.body.style.overflow=""; openKey=null; editing=null; clearInterval(tick);
+  renderGrid();
+  grid.querySelector(`[data-key="${lastFocus?.dataset?.key}"]`)?.focus();
+}
+scrim.addEventListener("click", closeDay);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && openKey) closeDay(); });
+
+/* ---------- Item rendering ---------- */
+const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : "";
+const getE = (k,id) => LOG[k]?.ex?.[id] || {w:[],r:[],done:false};
+function lastFor(key, k){ const hist = historyFor(key); return {hist, last: hist.find(h=> h.key < k)}; }
+function markBtn(e, label, notes=true){
+  return `<button class="mark" aria-pressed="${!!e.done}">${e.done ? label+" complete ✓" : "Mark "+(/^[A-Z]+$/.test(label) ? label : label.toLowerCase())+" complete"}</button>
+    ${notes ? `<label class="notes"><span>Notes</span>
+      <textarea data-kind="note" rows="2" aria-label="${esc(label)} notes" placeholder="How did it go? Form cues, pain, felt heavy or easy…">${esc(e.note ?? "")}</textarea></label>` : ""}`;
+}
+function parseMins(s){ s=String(s||""); if(s.includes(":")){ const [a,b]=s.split(":"); return (+a||0)+(+b||0)/60; } return parseFloat(s); }
+function histPanel(id, hist, rowText){
+  if(!hist.length) return "";
+  const open = openHist.has(id);
+  return `<button class="histbtn" aria-expanded="${open}">${open? "Hide history" : `History (${hist.length})`}</button>
+    <div class="hist"${open? "" : " hidden"}>${spark(hist)}
+    <ol>${hist.map(h=>`<li><span>${shortDate(h.key)}</span><span>${esc(rowText(h))}</span><strong>${isFinite(topW(h))? topW(h)+" top" : ""}</strong>${hasVal(h.note) ? `<em class="hnote">${esc(h.note)}</em>` : ""}</li>`).join("")}</ol></div>`;
+}
+const unitOf = r => /\d\s?s\b|sec/i.test(r) ? "sec" : /\d\s?m\b/.test(r) ? "m" : "reps";
+
+/* The "Change exercise" row and its editor */
+const SLOTS = {};
+function editRow(it){
+  SLOTS[it._slot] = it;
+  return `<div class="editrow"><button class="ebtn" data-act="edit" data-slot="${it._slot}" aria-expanded="${editing===it._slot}">✎ Change exercise</button>${it._edited ? `<span class="chg">Changed from program</span>` : ""}</div>${editing===it._slot ? editPanel(it) : ""}`;
+}
+function fieldHtml(label, name, val, extra=""){
+  return `<label>${label}<input type="text" name="${name}" value="${esc(val)}" ${extra}></label>`;
+}
+function editPanel(it){
+  const slot = it._slot;
+  let f = "";
+  if(it.kind==="lift"){
+    const basisOpts = [["keep", it.lift && it.pct ? `Keep ${it.pct}% of ${it.lift} 1RM` : "Keep as programmed"], ["none","No target weight"], ...LIFTS.map(l=>[l, "% of "+l+" 1RM"])];
+    f = fieldHtml("Exercise","name",it.name,'list="exNames" maxlength="80" autocomplete="off" required')
+      + `<div class="row2">${fieldHtml("Sets","sets",it.sets,'inputmode="numeric" maxlength="2"')}${fieldHtml("Reps","reps",it.reps,'maxlength="20"')}</div>
+      <label>Target weight<select name="basis">${basisOpts.map(([v,t])=>`<option value="${esc(v)}"${v==="keep"?" selected":""}>${esc(t)}</option>`).join("")}</select></label>
+      <label id="pctRow" hidden>Percent of 1RM<input type="text" name="pct" inputmode="numeric" maxlength="3" value="${esc(it.pct||"")}"></label>
+      <label>Coaching note<textarea name="coach" maxlength="300" rows="2">${esc(it.coach||"")}</textarea></label>`;
+  }else if(it.kind==="wod"){
+    f = fieldHtml("Workout name / format","head",it.head,'maxlength="120"')
+      + `<label>Movements<textarea name="body" maxlength="500" rows="4">${esc(it.body||"")}</textarea></label>`;
+  }else if(it.kind==="cardio"){
+    f = fieldHtml("Activity","name",it.name,'list="exNames" maxlength="80" autocomplete="off" required') + fieldHtml("Duration or distance","dur",it.dur,'maxlength="30"');
+  }else if(it.kind==="test"){
+    f = fieldHtml("Lift to test","name",it.name,'list="exNames" maxlength="80" autocomplete="off" required');
+  }else{ // warmup, note
+    f = `<label>${it.kind==="warmup"?"Warm-up":"Note"}<textarea name="text" maxlength="500" rows="4">${esc(it.text||"")}</textarea></label>`;
+  }
+  const canRemove = it.kind!=="note";
+  return `<form class="editpanel" data-slot="${slot}" aria-label="Change ${esc(it.name||it.head||it.kind)}">
+    ${f}
+    ${repeats(it) ? `<fieldset><legend>Apply to</legend>
+      <label><input type="radio" name="scope" value="day" checked> This day only</label>
+      <label><input type="radio" name="scope" value="later"> This day and every later week</label></fieldset>` : `<input type="hidden" name="scope" value="day">`}
+    <p class="hint">${it.kind==="lift" ? "Weights you log are saved under the exercise name, so a swapped-in lift shows its own history." : "Your changes are saved with the rest of your data."}</p>
+    <div class="btnrow"><button type="submit" class="tbtn">Save change</button>
+      ${it._edited ? `<button type="button" class="tbtn ghost" data-eact="restore">Restore original</button>` : ""}
+      ${canRemove ? `<button type="button" class="tbtn ghost" data-eact="remove">Remove from workout</button>` : ""}
+      <button type="button" class="tbtn ghost" data-eact="cancel">Cancel</button></div></form>`;
+}
+function whatsChanged(it){
+  const o = it._orig;
+  if(!o || it.kind==="wod" || it.kind==="warmup" || it.kind==="note") return "";
+  return o.name && o.name !== it.name ? `<p class="was">Replaces ${esc(o.name)}</p>` : "";
+}
+
+function exerciseBody(ex, id, k, tag){
+  const e = getE(k,id), {hist,last} = lastFor(ex.name, k);
+  const tw = targetWt(ex);
+  const meta = [ex.pct && ex.lift ? ex.pct+"% of "+ex.lift+" 1RM" : "", tw ? "Target "+tw+" lb" : "", ex.effort, ex.tag].filter(Boolean);
+  const unit = unitOf(ex.reps), plainReps = /^[\d–+\-]+$/.test(String(ex.reps));
+  const note = [ex.cue, ex.coach].filter(Boolean).join(" · ");
+  const lead = String(ex.reps).match(/\d+/)?.[0] || "";
+  let h = `<div class="ex-top"><h3>${tag? `<span class="sstag">${tag}</span>` : ""}${esc(ex.name)}</h3>
+      <div class="scheme">${ex.sets} × ${esc(ex.reps)}</div></div>
+    ${meta.length? `<ul class="meta">${meta.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>` : ""}
+    ${whatsChanged(ex)}
+    ${note ? `<p class="note">${esc(note)}</p>` : ""}
+    <div class="sets">`;
+  for(let s=0;s<ex.sets;s++){
+    h += `<div class="set">
+      <div class="sl"><span class="sn">Set ${s+1}</span><span class="reps">${esc(ex.reps)}${plainReps ? " reps" : ""}</span></div>
+      <label class="wt rp"><input inputmode="numeric" data-kind="r" data-set="${s}" aria-label="${esc(ex.name)}, set ${s+1} ${unit} done"
+        value="${esc(e.r?.[s]??"")}" placeholder="${esc(lead)}"><span>${unit}</span></label>
+      <label class="wt"><input inputmode="decimal" data-kind="w" data-set="${s}" aria-label="${esc(ex.name)}, set ${s+1} weight in pounds"
+        value="${esc(e.w?.[s]??"")}" placeholder="${esc(last && hasVal(last.w[s]) ? last.w[s] : tw || "—")}"><span>lb</span></label></div>`;
+  }
+  h += `</div>`;
+  if(last) h += `<p class="last">Last time, ${shortDate(last.key)}: ${esc(setsText(last))} lb</p>`;
+  h += histPanel(id, hist, x=> setsText(x)+" lb");
+  return h + editRow(ex);
+}
+function removedRow(it){
+  SLOTS[it._slot] = it;
+  return `<div class="removed"><span>Removed: <s>${esc(it.name || it.head || "Warm-up")}</s></span><button class="ebtn" data-act="unremove" data-slot="${it._slot}">Restore</button></div>`;
+}
+function exerciseCard(ex, k, cx){
+  if(ex._removed) return removedRow(ex);
+  const id = itemId(cx.ci,ex), e = getE(k,id);
+  return `<section class="ex${e.done?" done":""}" data-id="${id}">${exerciseBody(ex,id,k)}${markBtn(e,"Exercise")}</section>`;
+}
+function groupCard(item, k, cx){
+  const members = item.items, live = members.filter(m=>!m._removed);
+  const id = itemId(cx.ci,item), e = getE(k,id), pre = item.block==="Abs" ? "AB" : item.block;
+  let n = 0;
+  const body = members.map(x=>{
+    if(x._removed) return removedRow(x);
+    const sid = itemId(cx.ci,x);
+    return `<div class="subex" data-id="${sid}">${exerciseBody(x,sid,k,pre+(++n))}</div>`;
+  }).join("");
+  if(!live.length) return members.map(removedRow).join("");
+  return `<section class="ex group superset${e.done?" done":""}" data-id="${id}">
+    <p class="grouphead"><span class="wodtag">${esc(item.label)}</span> ${esc(item.howto)}</p>
+    ${body}
+    ${markBtn(e,item.label==="ABS FINISHER" ? "Abs" : "Superset")}</section>`;
+}
+function wodCard(item, k, cx){
+  if(item._removed) return removedRow(item);
+  const id = itemId(cx.ci,item), e = getE(k,id), {hist,last} = lastFor("wod-d"+item._n, k);
+  const summary = h => [h.score, h.w.some(hasVal) ? h.w.filter(hasVal).join("/")+" lb" : ""].filter(Boolean).join(", ");
+  return `<section class="ex group wod${e.done?" done":""}" data-id="${id}">
+    <p class="grouphead"><span class="wodtag">WOD</span> <strong>${esc(item.head)}</strong></p>
+    ${item.body ? `<p class="wodbody">${esc(item.body).replace(/ · /g,"<br>· ")}</p>` : ""}
+    ${item.coach ? `<p class="note">${esc(item.coach)}</p>` : ""}
+    <div class="wodlog"><span class="scorelbl">Score / time</span>
+      <label class="wt"><input data-kind="score" maxlength="30" autocomplete="off" aria-label="WOD score or time" placeholder="${esc(last?.score || "time / score")}" value="${esc(e.score ?? "")}" style="width:130px;text-align:left"></label>
+      <span class="scorelbl">Load</span>
+      <label class="wt"><input inputmode="decimal" data-kind="w" data-set="0" aria-label="WOD weight in pounds" value="${esc(e.w?.[0]??"")}" placeholder="${esc(last && hasVal(last.w[0]) ? last.w[0] : "—")}"><span>lb</span></label></div>
+    ${last ? `<p class="last">Last time, ${shortDate(last.key)}: ${esc(summary(last))}</p>` : ""}
+    ${histPanel(id, hist, summary)}
+    ${editRow(item)}
+    ${markBtn(e,"WOD")}</section>`;
+}
+function testCard(item, k, cx){
+  if(item._removed) return removedRow(item);
+  const id = itemId(cx.ci,item), e = getE(k,id), {hist,last} = lastFor(item.name, k);
+  return `<section class="ex test${e.done?" done":""}" data-id="${id}">
+    <div class="ex-top"><h3><span class="sstag">TEST</span>${esc(item.name)}</h3><div class="scheme">1RM</div></div>
+    <ul class="meta"><li>Work up to a max</li></ul>
+    ${whatsChanged(item)}
+    ${item.coach ? `<p class="note">${esc(item.coach)}</p>` : ""}
+    <div class="logline"><span class="scorelbl">Heaviest successful lift</span>
+      <label class="wt"><input inputmode="decimal" data-kind="w" data-set="0" aria-label="${esc(item.name)} one rep max in pounds" value="${esc(e.w?.[0]??"")}" placeholder="${esc(last && hasVal(topW(last)) && isFinite(topW(last)) ? topW(last) : "—")}"><span>lb</span></label></div>
+    ${last ? `<p class="last">Last time, ${shortDate(last.key)}: ${esc(setsText(last))} lb</p>` : ""}
+    ${histPanel(id, hist, x=> setsText(x)+" lb")}
+    ${editRow(item)}
+    ${markBtn(e,"Test")}</section>`;
+}
+function cardioCard(item, k, cx){
+  if(item._removed) return removedRow(item);
+  const id = itemId(cx.ci,item), e = getE(k,id), {hist,last} = lastFor(item.name, k);
+  const summary = h => [h.mins ? h.mins+" min" : "", h.score].filter(Boolean).join(", ");
+  return `<section class="ex run${item.optional?" optional":""}${e.done?" done":""}" data-id="${id}">
+    <div class="ex-top"><h3>${esc(item.name)}</h3><div class="scheme">${esc(item.dur)}</div></div>
+    <ul class="meta">${item.effort ? `<li>${esc(item.effort)}</li>` : ""}</ul>
+    ${whatsChanged(item)}
+    ${item.coach ? `<p class="note">${esc(item.coach)}</p>` : ""}
+    <div class="runlog">
+      <label class="wt"><input inputmode="decimal" data-kind="mins" aria-label="Minutes" value="${esc(e.mins??"")}" placeholder="${esc(last?.mins || "0")}"><span>min</span></label>
+      <label class="wt"><input data-kind="score" maxlength="30" autocomplete="off" aria-label="Distance or calories" value="${esc(e.score??"")}" placeholder="distance / cal" style="width:140px;padding-right:10px;text-align:left"></label>
+    </div>
+    ${last ? `<p class="last">Last time, ${shortDate(last.key)}: ${esc(summary(last))}</p>` : ""}
+    ${histPanel(id, hist, summary)}
+    ${editRow(item)}
+    ${markBtn(e,"Cardio")}</section>`;
+}
+function warmCard(item, k, cx){
+  if(item._removed) return removedRow(item);
+  const id = itemId(cx.ci,item), e = getE(k,id);
+  return `<section class="ex warm${e.done?" done":""}" data-id="${id}">
+    <h3>Warm-up</h3><p class="note">${esc(item.text)}</p>
+    ${editRow(item)}
+    ${markBtn(e,"Warm-up",false)}</section>`;
+}
+function noteCard(item, k, cx){
+  if(item._removed) return removedRow(item);
+  return `<section class="ex warm"><h3>Optional</h3><p class="note">${esc(item.text)}</p>${editRow(item)}</section>`;
+}
+function extraCard(id, e, k){
+  const name = e.name || "", n = Math.max(1, e.nsets||1);
+  const {hist,last} = name ? lastFor(name, k) : {hist:[], last:null};
+  let h = `<section class="ex extra${e.done?" done":""}" data-id="${id}">
+    <div class="ex-top"><label class="xname"><span>Exercise</span>
+      <input data-kind="name" list="exNames" autocomplete="off" maxlength="80" placeholder="e.g. Cable fly" value="${esc(name)}" aria-label="Extra exercise name"></label>
+      <span class="xtag">Extra</span></div>
+    <div class="sets">`;
+  for(let s=0;s<n;s++){
+    h += `<div class="set"><div class="sl"><span class="sn">Set ${s+1}</span></div>
+      <label class="wt rp"><input inputmode="numeric" data-kind="r" data-set="${s}" aria-label="${esc(name||"Extra exercise")}, set ${s+1} reps"
+        value="${esc(e.r?.[s]??"")}" placeholder="${esc(last && hasVal(last.r[s]) ? last.r[s] : "—")}"><span>reps</span></label>
+      <label class="wt"><input inputmode="decimal" data-kind="w" data-set="${s}" aria-label="${esc(name||"Extra exercise")}, set ${s+1} weight in pounds"
+        value="${esc(e.w?.[s]??"")}" placeholder="${esc(last && hasVal(last.w[s]) ? last.w[s] : "—")}"><span>lb</span></label></div>`;
+  }
+  h += `</div><div class="xsets"><button class="xbtn" data-act="addset">+ Add set</button>
+      ${n>1 ? `<button class="xbtn" data-act="dropset">− Remove set</button>` : ""}
+      <button class="xbtn danger" data-act="delete">Delete exercise</button></div>`;
+  if(last) h += `<p class="last">Last time, ${shortDate(last.key)}: ${esc(setsText(last))} lb</p>`;
+  h += histPanel(id, hist, x=> setsText(x)+" lb");
+  return h + markBtn(e,"Exercise") + `</section>`;
+}
+function extrasOf(k){
+  const ex = LOG[k]?.ex || {};
+  return Object.keys(ex).filter(id=> ex[id]?.extra).sort((a,b)=> (ex[a].created||0)-(ex[b].created||0));
+}
+function allExerciseNames(){
+  const names = new Set(COMMON);
+  const add = x => { if(x.kind==="group") x.items.forEach(add); else if(x.name && x.kind!=="wod") names.add(x.name); };
+  Object.values(PROGRAM.weeks).forEach(w=> Object.values(w).forEach(d=> d.items.forEach(add)));
+  Object.values(OVR).forEach(l=> l.forEach(o=>{ if(o.data?.name) names.add(o.data.name); }));
+  Object.values(LOG).forEach(d=> Object.values(d?.ex||{}).forEach(e=>{ if(e?.extra && e.name) names.add(e.name); }));
+  return [...names].sort((a,b)=> a.localeCompare(b));
+}
+let deleteArmed = null, sheetPlan = null;
+function renderItem(item, k, cx){
+  switch(item.kind){
+    case "group": return groupCard(item,k,cx);
+    case "wod": return wodCard(item,k,cx);
+    case "test": return testCard(item,k,cx);
+    case "cardio": return cardioCard(item,k,cx);
+    case "warmup": return warmCard(item,k,cx);
+    case "note": return noteCard(item,k,cx);
+    default: return exerciseCard(item,k,cx);
+  }
+}
+
+function renderSheet(){
+  const k=openKey, date=parseKey(k), plan=planFor(date);
+  clearInterval(tick);
+  sheetPlan = plan;
+  const dateStr = date.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+  if(plan.pre){
+    sheet.style.removeProperty("--c");
+    sheet.innerHTML = `<div class="sheet-head"><div><h2 id="sheetTitle">Not started</h2><p class="date">${dateStr}</p></div>
+      <button class="close" aria-label="Close">×</button></div>
+      <div class="rest-card"><strong>${START? "Before your start date" : "Set a start date"}</strong>
+      <p>${START? "Your program begins "+parseKey(START).toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})+"." : "Pick the day you want Day 1 to land on."}</p>
+      <button class="mark startbtn" id="startHere">Start the program on this day</button></div>`;
+    sheet.querySelector(".close").onclick = closeDay;
+    sheet.querySelector("#startHere").onclick = ()=>{ setStart(k); syncStartInput(); renderSheet(); };
+    return;
+  }
+  if(!isTraining(plan)){
+    sheet.style.removeProperty("--c");
+    const wkLine = plan.ended ? "The 8 weeks are done" : `Week ${plan.week} of ${NWEEKS}`;
+    sheet.innerHTML = `<div class="sheet-head"><div><h2 id="sheetTitle">${plan.ended ? "Program complete" : "Rest day"}</h2><p class="date">${dateStr}<br>${wkLine}${plan.movedFrom ? `<br>Moved from ${dLabel(plan.movedFrom)}` : ""}</p></div>
+      <button class="close" aria-label="Close">×</button></div>
+      ${plan.ended ? "" : moveBlock(k, plan)}
+      <div class="rest-card">${plan.ended
+        ? `<strong>Eight weeks done</strong><p>Check your weigh-ins and compare your tested 1RMs against where you started.</p>`
+        : `<strong>No lifting today</strong><p>Recover, eat well, and get some sleep.</p>`}</div>`;
+    sheet.querySelector(".close").onclick = closeDay; wireMove(k); return;
+  }
+  const wkLine = `Week ${plan.week} of ${NWEEKS} · ${plan.phase}, Day ${plan.n}${plan.optional ? " (optional)" : ""}`;
+  const p = progress(k,plan), tm = timerOf(k), cx = {ci:plan.ci};
+  sheet.style.setProperty("--c", `var(${plan.color})`);
+  let html = `<div class="sheet-head"><div><h2 id="sheetTitle">${esc(plan.session)}</h2><p class="date">${dateStr}<br>${wkLine}${plan.movedFrom ? `<br>Moved from ${dLabel(plan.movedFrom)}` : ""}</p></div>
+    <button class="close" aria-label="Close">×</button></div>
+    ${moveBlock(k, plan)}
+    <div class="timer ${tm.end? "ended" : tm.start? "running" : ""}">
+      <div><span class="tlabel">${tm.end? "Workout time" : tm.start? "Elapsed" : "Workout timer"}</span>
+      <span class="clock" id="clock" role="timer">${tm.start? fmtDur((tm.end||Date.now())-tm.start) : "0:00"}</span></div>
+      ${tm.end ? `<button class="tbtn ghost" id="tReset">Reset</button>`
+        : tm.start ? `<button class="tbtn end" id="tEnd">End workout</button>`
+        : `<button class="tbtn" id="tStart">Start workout</button>`}
+    </div>
+    <div class="bar"><i style="width:${p.pct}%"></i></div>
+    <p class="progress-text">${p.n} of ${p.total} done</p>`;
+  effItems(plan).forEach(item=>{ html += renderItem(item, k, cx); });
+  const extras = extrasOf(k);
+  html += `<div class="extras">
+    <h3 class="xhead">Extra work</h3>
+    <p class="xsub">${extras.length ? "Logged on top of today's program. These don't count toward the day's progress." : "Feel like doing more? Add exercises here to log sets, reps and weight."}</p>
+    ${extras.map(id=> extraCard(id, LOG[k].ex[id], k)).join("")}
+    <button class="addx" id="addExtra">+ Add exercise</button>
+  </div>
+  <datalist id="exNames">${allExerciseNames().map(n=>`<option value="${esc(n)}"></option>`).join("")}</datalist>`;
+  sheet.innerHTML = html;
+  sheet.querySelector(".close").onclick = closeDay;
+  wireMove(k);
+  wireEdits(plan);
+
+  const setTimer = t => { LOG[k] ??= {ex:{}}; LOG[k].timer = t; resetArmed=false; persist(k, true); keepScroll(renderSheet); sheet.querySelector(".tbtn")?.focus(); };
+  sheet.querySelector("#tStart")?.addEventListener("click", ()=> setTimer({start:Date.now()}));
+  sheet.querySelector("#tEnd")?.addEventListener("click", ()=> setTimer({start:tm.start, end:Date.now()}));
+  sheet.querySelector("#tReset")?.addEventListener("click", ev=>{
+    if(resetArmed){ setTimer({}); return; }
+    resetArmed = true; ev.currentTarget.textContent = "Tap again to clear";
+    setTimeout(()=>{ if(resetArmed){ resetArmed=false; const b=sheet.querySelector("#tReset"); if(b) b.textContent="Reset"; } }, 3000);
+  });
+  if(tm.start && !tm.end){
+    const clock = sheet.querySelector("#clock");
+    tick = setInterval(()=>{ clock.textContent = fmtDur(Date.now()-tm.start); }, 1000);
+  }
+
+  sheet.querySelectorAll("input[data-kind], textarea[data-kind]").forEach(inp=>{
+    const holder = inp.closest("[data-id]"), id = holder.dataset.id, kind = inp.dataset.kind;
+    inp.addEventListener("input", ()=>{
+      const e = entry(k,id);
+      const v = kind==="note" ? inp.value.slice(0, 2000) : kind==="name" ? inp.value.slice(0, 80) : kind==="desc" ? inp.value.slice(0, 1000) : kind==="score" ? inp.value.slice(0, 30) : inp.value.replace(kind==="w"||kind==="miles" ? /[^\d.]/g : kind==="mins" ? /[^\d.:]/g : /\D/g, "");
+      if(kind==="w"||kind==="r") e[kind][+inp.dataset.set] = v; else e[kind] = v;
+      persist(k);
+    });
+    inp.addEventListener("change", ()=>{
+      persist(k, true);
+      if(kind==="name"){ keepScroll(renderSheet); sheet.querySelector(`[data-id="${id}"] input[data-set="0"][data-kind="r"]`)?.focus(); }
+    });
+  });
+  sheet.querySelectorAll(".histbtn").forEach(btn=>{
+    const id = btn.closest("[data-id]").dataset.id;
+    btn.addEventListener("click", ()=>{
+      openHist.has(id) ? openHist.delete(id) : openHist.add(id);
+      keepScroll(renderSheet);
+      [...sheet.querySelectorAll(".histbtn")].find(b=> b.closest("[data-id]").dataset.id===id)?.focus();
+    });
+  });
+  sheet.querySelector("#addExtra")?.addEventListener("click", ()=>{
+    LOG[k] ??= {ex:{}}; LOG[k].ex ??= {};
+    const id = "x" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    LOG[k].ex[id] = {extra:true, name:"", nsets:3, w:[], r:[], done:false, created:Date.now()};
+    persist(k, true); keepScroll(renderSheet);
+    sheet.querySelector(`[data-id="${id}"] input[data-kind="name"]`)?.focus();
+  });
+  sheet.querySelectorAll(".xbtn").forEach(btn=>{
+    const id = btn.closest("[data-id]").dataset.id, act = btn.dataset.act;
+    btn.addEventListener("click", ()=>{
+      const e = LOG[k]?.ex?.[id]; if(!e) return;
+      if(act==="addset") e.nsets = Math.min(20, (e.nsets||1)+1);
+      if(act==="dropset"){ e.nsets = Math.max(1, (e.nsets||1)-1); e.w.length = Math.min(e.w.length, e.nsets); e.r.length = Math.min(e.r.length, e.nsets); }
+      if(act==="delete"){
+        if(deleteArmed !== id){
+          deleteArmed = id; btn.textContent = "Tap again to delete";
+          setTimeout(()=>{ if(deleteArmed===id){ deleteArmed=null; btn.textContent="Delete exercise"; } }, 3000);
+          return;
+        }
+        deleteArmed = null; delete LOG[k].ex[id];
+      }
+      persist(k, true); keepScroll(renderSheet);
+      if(act!=="delete") [...sheet.querySelectorAll(".xbtn")].find(b=> b.dataset.act===act && b.closest("[data-id]")?.dataset.id===id)?.focus();
+      else sheet.querySelector("#addExtra")?.focus();
+    });
+  });
+  sheet.querySelectorAll(".mark").forEach(btn=>{
+    const id = btn.closest("[data-id]").dataset.id;
+    btn.addEventListener("click", ()=>{
+      const e = entry(k,id); e.done = !e.done; persist(k, true);
+      keepScroll(renderSheet);
+      [...sheet.querySelectorAll(".mark")].find(b=> b.closest("[data-id]").dataset.id===id)?.focus();
+    });
+  });
+}
+
+/* ---------- Changing exercises ---------- */
+function wireEdits(plan){
+  const wk = plan.week;
+  const rerender = (focusSel)=>{ keepScroll(renderSheet); if(focusSel) sheet.querySelector(focusSel)?.focus(); };
+  sheet.querySelectorAll(".ebtn[data-act]").forEach(b=>{
+    const slot = b.dataset.slot;
+    b.addEventListener("click", ()=>{
+      if(b.dataset.act==="edit"){
+        editing = editing===slot ? null : slot;
+        rerender(editing ? `.editpanel [name="name"], .editpanel [name="head"], .editpanel [name="text"], .editpanel [name="dur"]` : `.ebtn[data-slot="${slot}"]`);
+      }else if(b.dataset.act==="unremove"){
+        clearOverride(slot, wk, "day"); editing = null;
+        rerender(); toast("Restored for this day.");
+      }
+    });
+  });
+  sheet.querySelectorAll("form.editpanel").forEach(f=>{
+    const slot = f.dataset.slot, it = SLOTS[slot];
+    const sel = f.elements.basis, pctRow = f.querySelector("#pctRow");
+    const syncPct = ()=>{ if(pctRow){ const isLift = LIFTS.includes(sel.value); pctRow.hidden = !isLift; if(isLift && !f.elements.pct.value) f.elements.pct.value = (it.lift===sel.value && it.pct) || 70; } };
+    if(sel){
+      sel.addEventListener("change", syncPct); syncPct();
+      f.elements.name.addEventListener("input", ()=>{
+        if(sel.value==="keep" && f.elements.name.value.trim() !== it.name){ sel.value = "none"; syncPct(); }
+      });
+    }
+    f.addEventListener("submit", ev=>{
+      ev.preventDefault();
+      const scope = f.elements.scope.value, val = n => (f.elements[n]?.value ?? "").trim();
+      let data;
+      if(it.kind==="lift"){
+        const name = val("name").slice(0,80); if(!name){ f.elements.name.focus(); return; }
+        const sets = Math.min(20, Math.max(1, parseInt(val("sets"),10) || it.sets));
+        let lift = it.lift || null, pct = it.pct || null;
+        if(sel.value==="none"){ lift = null; pct = null; }
+        else if(LIFTS.includes(sel.value)){ lift = sel.value; pct = Math.min(150, Math.max(1, parseInt(val("pct"),10) || 70)); }
+        data = {name, sets, reps: val("reps").slice(0,20) || it.reps, lift, pct, coach: val("coach").slice(0,300)};
+        const o = it._orig || it;
+        if(name !== o.name) data.cue = "";                       // the old cue belongs to the old exercise
+        if(name !== o.name && sel.value==="keep"){ data.lift = null; data.pct = null; }
+      }else if(it.kind==="wod"){
+        data = {head: val("head").slice(0,120) || it.head, body: val("body").slice(0,500)};
+      }else if(it.kind==="cardio"){
+        const name = val("name").slice(0,80); if(!name){ f.elements.name.focus(); return; }
+        data = {name, dur: val("dur").slice(0,30)};
+      }else if(it.kind==="test"){
+        const name = val("name").slice(0,80); if(!name){ f.elements.name.focus(); return; }
+        data = {name};
+      }else{
+        data = {text: val("text").slice(0,500)};
+      }
+      // identical to the program? then just drop the override
+      const o = it._orig || it;
+      if(Object.keys(data).every(key=> String(data[key] ?? "") === String(o[key] ?? ""))){
+        clearOverride(slot, wk, scope); editing = null; rerender(); toast("Back to the program version."); return;
+      }
+      setOverride(slot, wk, scope, data); editing = null; rerender();
+      toast(scope==="later" ? `Changed from week ${wk} on.` : "Changed for this day.");
+    });
+    f.querySelectorAll("[data-eact]").forEach(b=> b.addEventListener("click", ()=>{
+      const scope = f.elements.scope.value, act = b.dataset.eact;
+      if(act==="cancel"){ editing = null; rerender(`.ebtn[data-slot="${slot}"]`); return; }
+      if(act==="remove"){ setOverride(slot, wk, scope, {removed:true}); editing = null; rerender(); toast(scope==="later" ? `Removed from week ${wk} on.` : "Removed for this day."); return; }
+      if(act==="restore"){ clearOverride(slot, wk, scope); editing = null; rerender(`.ebtn[data-slot="${slot}"]`); toast("Restored the program version."); }
+    }));
+  });
+}
+
+/* ---------- 1RMs and body weight ---------- */
+function renderOnerm(){
+  const g = document.getElementById("onermGrid");
+  if(document.activeElement?.closest?.("#onermGrid")) return;
+  g.innerHTML = LIFTS.map(l=>`<label>${l}<span class="wt"><input inputmode="decimal" data-lift="${l}" aria-label="${l} one rep max in pounds" value="${esc(ONERM[l]??"")}"><span>lb</span></span></label>`).join("");
+  g.querySelectorAll("input").forEach(inp=> inp.addEventListener("input", ()=>{
+    const v = inp.value.replace(/[^\d.]/g,"");
+    if(v!==inp.value) inp.value = v;
+    ONERM[inp.dataset.lift] = v === "" ? "" : Number(v);
+    saveOnerm(); renderGrid();
+  }));
+}
+const r1 = n => Math.round(n*10)/10;
+function renderBody(){
+  const el = document.getElementById("bodyBody");
+  const s = Number(BODY.start)||0, g = Number(BODY.goal)||0;
+  let rows = "";
+  for(let i=0;i<=NWEEKS;i++){
+    const t = r1(s-(s-g)/NWEEKS*i), a = BODY.weeks?.[i] ?? "";
+    rows += `<tr><td>${i===0?"Start":"Week "+i}</td><td>${t}</td><td><label class="wt"><input inputmode="decimal" data-wk="${i}" aria-label="${i===0?"Starting":"Week "+i} average weight in pounds" value="${esc(a)}"><span>lb</span></label></td><td class="diff" data-d="${i}">${diffText(a,t)}</td></tr>`;
+  }
+  el.innerHTML = `<div class="onerm"><label>Start weight<span class="wt"><input inputmode="decimal" id="bwStart" aria-label="Start weight in pounds" value="${esc(BODY.start)}"><span>lb</span></span></label>
+      <label>Goal weight<span class="wt"><input inputmode="decimal" id="bwGoal" aria-label="Goal weight in pounds" value="${esc(BODY.goal)}"><span>lb</span></span></label></div>
+    <table class="btab"><thead><tr><th>Week</th><th>Target</th><th>Weekly average</th><th>vs target</th></tr></thead><tbody>${rows}</tbody></table>
+    <p>The target steps down evenly from start to goal over 8 weeks. Enter your average weigh-in for each week.</p>`;
+  const num = v => v.replace(/[^\d.]/g,"");
+  el.querySelector("#bwStart").addEventListener("input", ev=>{ BODY.start = num(ev.target.value); saveBody(); refreshBodyTargets(); });
+  el.querySelector("#bwGoal").addEventListener("input", ev=>{ BODY.goal = num(ev.target.value); saveBody(); refreshBodyTargets(); });
+  el.querySelectorAll("input[data-wk]").forEach(inp=> inp.addEventListener("input", ()=>{
+    const v = num(inp.value); if(v!==inp.value) inp.value = v;
+    BODY.weeks ??= {}; if(v==="") delete BODY.weeks[inp.dataset.wk]; else BODY.weeks[inp.dataset.wk] = v;
+    saveBody(); refreshBodyTargets();
+  }));
+}
+function diffText(a, t){
+  if(a===""||a===undefined||isNaN(Number(a))) return "";
+  const d = r1(Number(a)-t);
+  return (d>0?"+":"")+d+" lb";
+}
+function refreshBodyTargets(){
+  const s = Number(BODY.start)||0, g = Number(BODY.goal)||0;
+  document.querySelectorAll("#bodyBody tbody tr").forEach((tr,i)=>{
+    const t = r1(s-(s-g)/NWEEKS*i);
+    tr.children[1].textContent = t;
+    const d = tr.querySelector(".diff"); d.textContent = diffText(BODY.weeks?.[i] ?? "", t);
+    d.classList.toggle("ok", d.textContent.startsWith("-") || d.textContent.startsWith("0"));
+  });
+}
+
+document.getElementById("prev").onclick = ()=>{ view = new Date(view.getFullYear(), view.getMonth()-1, 1); renderGrid(); };
+document.getElementById("next").onclick = ()=>{ view = new Date(view.getFullYear(), view.getMonth()+1, 1); renderGrid(); };
+document.getElementById("todayBtn").onclick = ()=>{ view = new Date(today.getFullYear(), today.getMonth(), 1); renderGrid(); };
+
+const startInput = document.getElementById("startDate");
+function syncStartInput(){ startInput.value = START || ""; document.getElementById("startHint").textContent = START? "" : "Pick a date and the program lines up from there."; }
+startInput.addEventListener("change", ()=>{ if(startInput.value){ setStart(startInput.value); view = new Date(parseKey(startInput.value).getFullYear(), parseKey(startInput.value).getMonth(), 1); renderGrid(); } });
+syncStartInput();
+renderLegend(); renderOnerm(); renderBody(); renderGrid();
+
+</script>
+</body>
+</html>
