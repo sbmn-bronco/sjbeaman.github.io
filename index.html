@@ -1,0 +1,459 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Samuel Beaman · Analytics</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --fg:#141821; --muted:#5a6272; --faint:#8a92a1;
+  --rule:#dde1e8; --accent:#1f4fd1; --accent-soft:#e7edfc; --chip:#eef1f5; --green:#13895a;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1117; --surface:#151a23; --fg:#e7eaf0; --muted:#a0a8b8; --faint:#6e7687;
+  --rule:#262d3a; --accent:#7c9cff; --accent-soft:#1a2440; --chip:#1c2230; --green:#3fcf8e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --surface:#151a23; --fg:#e7eaf0; --muted:#a0a8b8; --faint:#6e7687;
+  --rule:#262d3a; --accent:#7c9cff; --accent-soft:#1a2440; --chip:#1c2230; --green:#3fcf8e; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+.page{max-width:1280px;margin:0 auto;padding-block:56px 72px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:56px}
+a{color:var(--accent);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+.label{font:600 12px/1.5 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+header{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:end;border-bottom:2px solid var(--fg);padding-bottom:28px}
+header h1{font-size:clamp(40px,7vw,68px);font-weight:700;letter-spacing:-.01em}
+.role .nw{white-space:nowrap}
+@media (max-width:480px){.role .nw{white-space:normal}}
+.role .sep{color:var(--faint);padding:0 .25em;font-weight:400}
+.role{margin-top:10px;font:500 clamp(18px,2.4vw,22px)/1.3 var(--display);color:var(--accent)}
+.contact{display:grid;gap:6px;font-size:14px;color:var(--muted);text-align:right}
+.contact .email{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.contact code{font:500 14px var(--mono);color:var(--fg);user-select:all}
+button.copy{font:500 12px var(--body);border:1px solid var(--rule);background:var(--surface);color:var(--muted);border-radius:6px;padding:3px 8px;cursor:pointer}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+
+/* sections */
+section{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+section > .label{padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.summary{font-size:21px;line-height:1.6;max-width:none;margin:8px 0 0;text-align:left;text-wrap:pretty}
+@media (max-width:620px){.summary{font-size:18px}}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px 28px;margin-top:22px}
+.fact b{display:block;font:600 28px/1 var(--mono);color:var(--fg)}
+.fact span{font-size:13px;color:var(--muted)}
+
+/* experience */
+.jobs{display:grid;gap:32px}
+.job{display:grid;gap:8px;min-width:0}
+.job-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:baseline}
+.job h3{font-size:22px;font-weight:600}
+.job .org{color:var(--muted);font-size:15px}
+.job ul{margin:4px 0 0;padding-left:18px;display:grid;gap:6px;max-width:68ch}
+.job li::marker{color:var(--accent)}
+.job p{margin:0;color:var(--muted);max-width:68ch}
+
+/* work */
+.work{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:960px){.work{grid-template-columns:1fr}}
+.card{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:18px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px;text-decoration:none;color:inherit;transition:border-color .15s, transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.card .body{min-width:0;display:grid;gap:10px;align-content:start}
+.card h3{font-size:24px;font-weight:600}
+.card p{margin:0;color:var(--muted);max-width:62ch}
+.kind{font:500 12px var(--mono);color:var(--accent);letter-spacing:.04em}
+.specs{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.specs .num{color:var(--fg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12px var(--mono);background:var(--chip);color:var(--muted);padding:3px 8px;border-radius:4px}
+.open{font:600 14px var(--body);color:var(--accent)}
+.thumb{border-radius:8px;background:var(--accent-soft);aspect-ratio:16/8;max-width:100%;display:block;overflow:hidden}
+.thumb svg{width:100%;height:100%;display:block}
+.thumb .s{stroke:var(--accent);fill:none;stroke-width:2}
+.thumb .f{fill:var(--accent)}
+.thumb .g{fill:var(--accent);opacity:.25}
+.thumb .gl{stroke:var(--accent);opacity:.25;stroke-width:1}
+
+
+/* accomplishments */
+.wins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.win{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;min-width:0;text-decoration:none;color:var(--fg);transition:border-color .15s,transform .15s}
+.win:hover{border-color:var(--accent);transform:translateY(-1px)}
+.win:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.win .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.win svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.win .ic{color:var(--accent)}
+.win .ic.g{color:var(--green)}
+.win .who{font:600 11px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);text-align:right}
+.win .big{font:600 30px/1.1 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em;margin-top:8px}
+.win .wt{font:600 17px/1.25 var(--display)}
+.win .wp{font-size:14px;line-height:1.5;color:var(--muted)}
+.win .go{margin-top:auto;padding-top:8px;font:600 13px var(--body);color:var(--accent)}
+@media (max-width:900px){.wins{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.wins{grid-template-columns:1fr}}
+
+/* experience cards */
+.xp-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;font-size:14px;color:var(--muted)}
+.xps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px;align-items:start}
+@media (max-width:960px){.xps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.xps{grid-template-columns:1fr}}
+.xp{background:var(--surface);border:1px solid var(--rule);border-radius:10px;min-width:0;transition:border-color .15s,box-shadow .3s;scroll-margin-top:24px}
+.xp:hover{border-color:var(--accent)}
+.xp[open]{grid-column:1/-1;border-color:var(--accent)}
+.xp.flash{box-shadow:0 0 0 4px var(--accent-soft);border-color:var(--accent)}
+.xp summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 16px}
+.xp summary::-webkit-details-marker{display:none}
+.xp summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+.xp-tag{grid-column:1;font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.xp-title{grid-column:1;font:600 17px/1.25 var(--display);color:var(--fg)}
+.xp-line{grid-column:1;font-size:14px;color:var(--muted)}
+.xp-more{grid-column:2;grid-row:1/4;align-self:center;width:24px;height:24px;border-radius:50%;border:1px solid var(--rule);position:relative}
+.xp-more::before,.xp-more::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1.5px;background:var(--muted);transform:translate(-50%,-50%)}
+.xp-more::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .15s}
+.xp[open] .xp-more::after{transform:translate(-50%,-50%) rotate(0deg)}
+.xp-body{border-top:1px solid var(--rule);margin:0 16px;padding:14px 0 16px;display:grid;gap:10px}
+.xp-body p{margin:0;color:var(--fg);max-width:80ch}
+.xp-body ul{margin:0;padding-left:18px;display:grid;gap:6px;max-width:80ch;color:var(--muted)}
+.xp-body li::marker{color:var(--accent)}
+
+
+/* education */
+.eds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.eds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.eds{grid-template-columns:1fr}}
+.ed{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ed-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.ed-title{font:600 18px/1.25 var(--display);color:var(--fg);text-wrap:balance}
+.ed-school{font-size:14px;color:var(--muted)}
+.ed-meta{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--rule);display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.ed-meta .num{color:var(--fg);font-weight:500}
+.cr{margin-top:8px}
+.cr-h{font:600 15px/1.3 var(--display);color:var(--fg);margin-bottom:8px}
+.cr-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}
+@media (max-width:760px){.cr-list{grid-template-columns:1fr}}
+.cr-list li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--rule);font-size:14px}
+.cr-name{color:var(--fg);font-weight:500}
+.cr-src{color:var(--muted);text-align:right}
+@media (max-width:420px){.cr-list li{grid-template-columns:minmax(0,1fr) auto}.cr-src{grid-column:1;grid-row:2;text-align:left}}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 40px}
+@media (max-width:900px){.skills{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.skills{grid-template-columns:1fr}}
+.skills h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.skills p{margin:0;color:var(--muted);font-size:15px}
+
+
+.co{display:grid;gap:18px;min-width:0}
+.co-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.co-head h3{font-size:24px;font-weight:700;letter-spacing:.01em}
+.co-head span{font-size:14px;color:var(--muted)}
+.dates{font:500 13px var(--mono);color:var(--muted);white-space:nowrap}
+.job h4{margin:0;font:600 18px/1.25 var(--display)}
+.job h4 em{font-style:normal;font-weight:500;color:var(--muted)}
+.job li b{font-weight:600}
+.edu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 32px}
+@media (max-width:960px){.edu{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.edu div{display:grid;gap:2px;min-width:0}
+.edu b{font:600 16px/1.3 var(--display)}
+.edu span{color:var(--muted);font-size:14px}
+.more{margin-top:10px;font-size:14px;color:var(--muted)}
+.contact a{color:var(--accent)}
+@media (max-width:520px){.edu{grid-template-columns:1fr}}
+footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:var(--faint);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+@media (max-width:760px){
+  header{grid-template-columns:1fr}
+  .contact{text-align:left}.contact .email{justify-content:flex-start}
+  section{grid-template-columns:1fr}
+  .page{padding-block:32px 48px;gap:44px}
+}
+</style>
+
+<div class="page">
+  <header>
+    <div>
+      <h1>Samuel Beaman</h1>
+      <div class="role"><span class="nw">Enterprise Analytics &amp; Business Intelligence Leader</span> <span class="sep">|</span> <span class="nw">AI Enablement</span> <span class="sep">|</span> <span class="nw">Data Strategy</span></div>
+    </div>
+    <div class="contact">
+      <span>Boise, Idaho</span>
+      <span class="email"><code id="email">samueljbeaman@gmail.com</code><button class="copy" id="copy" type="button">Copy</button></span>
+      <span class="num">214-998-0235</span>
+      <a href="https://www.linkedin.com/in/sjbeaman" target="_blank" rel="noopener">linkedin.com/in/sjbeaman</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="label">Profile</div>
+    <div>
+      <p class="summary">Strategic, results-driven Business Intelligence and Analytics Leader with expertise in data science, machine learning, and enterprise analytics, leveraging cross-functional leadership and innovative technology to transform complex data into actionable insights, optimize performance, and drive business value across Fortune 10 organizations and diverse industries.</p>
+    </div>
+  </section>
+
+  <section id="accomplishments">
+    <div class="label">Key Career Accomplishments</div>
+    <div class="wins">
+      <a class="win" href="#xp-cash"><span class="top"><span class="ic g"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2"/><path d="M3 6v12a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-3"/></svg></span><span class="who">J.R. Simplot</span></span><span class="big">$3M+</span><span class="wt">Financial Savings</span><span class="wp">Directed a multi-billion-dollar Treasury forecasting initiative, eliminating unnecessary loan interest.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-cash"><span class="top"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M16 7h4v4"/></svg></span><span class="who">J.R. Simplot</span></span><span class="big">$150M+</span><span class="wt">Forecast Accuracy Improvement</span><span class="wp">Led enterprise cash forecasting modernization, improving financial visibility and forecasting accuracy.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-fraud"><span class="top"><span class="ic g"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="who">Jacksons Food Stores</span></span><span class="big">$2.5M</span><span class="wt">Fraud Losses Prevented</span><span class="wp">Led machine learning fraud detection models that identified fraudulent retail transactions and reduced theft losses.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-board"><span class="top"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16"/><path d="M14 9h5a1 1 0 0 1 1 1v11"/><path d="M2 21h20"/><path d="M8 8h2M8 12h2M8 16h2"/></svg></span><span class="who">McKesson · Fortune 10</span></span><span class="big">Board</span><span class="wt">Board of Directors Analytics</span><span class="wp">Served as lead product manager and developer for a custom web application, executive reporting dashboards, and automated analytics solution consumed by McKesson's Board of Directors.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-basket"><span class="top"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 5 4h14l2 5"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/><path d="M10 20v-4h4v4"/></svg></span><span class="who">Jacksons Food Stores</span></span><span class="big">1,000</span><span class="wt">Retail Locations Impacted</span><span class="wp">Led fraud detection, transactional analytics, and market basket intelligence across the retail network.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-copilot"><span class="top"><span class="ic g"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="m12 8 1.3 2.7L16 12l-2.7 1.3L12 16l-1.3-2.7L8 12l2.7-1.3z"/></svg></span><span class="who">McKesson</span></span><span class="big">88%</span><span class="wt">AI Engagement Score</span><span class="wp">Led enterprise Microsoft Copilot development and rollout, strengthening AI adoption and user engagement.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-training"><span class="top"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14a6 6 0 0 1 3.5 6"/></svg></span><span class="who">Jacksons · Simplot · McKesson</span></span><span class="big">200+</span><span class="wt">Employees Trained</span><span class="wp">Led analytics and AI enablement across three organizations, accelerating adoption of Power BI and AI tools.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-foodqa"><span class="top"><span class="ic g"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="who">J.R. Simplot</span></span><span class="big">200+</span><span class="wt">Hours Saved Annually</span><span class="wp">Modernized food quality assurance workflows through automated data pipelines and reporting solutions.</span><span class="go">View details &darr;</span></a>
+      <a class="win" href="#xp-chatbot"><span class="top"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4"/><circle cx="12" cy="3.5" r="1"/><path d="M9 13v1M15 13v1"/></svg></span><span class="who">J.R. Simplot</span></span><span class="big">100s</span><span class="wt">Support Hours Saved</span><span class="wp">Developed an AI-powered procurement chatbot to automate repetitive support tasks and internal workflows.</span><span class="go">View details &darr;</span></a>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Experience</div>
+    <div>
+      <div class="xp-bar"><span>Select any card for details.</span><button type="button" class="copy" id="xpall">Expand all</button></div>
+      <div class="jobs">
+      <div class="co">
+        <div class="co-head"><h3>McKesson</h3><span>Healthcare · Fortune 10</span></div>
+        <div class="job">
+          <div class="job-head"><h4>Sr. Business Intelligence Analyst <em>(Data Product Owner)</em></h4><span class="dates">Jul 2025 – Present</span></div>
+          <div class="xps">
+            <details class="xp" id="xp-copilot">
+              <summary><span class="xp-tag">AI enablement</span><span class="xp-title">Enterprise Copilot Rollout</span><span class="xp-line">100+ users trained · 88% engagement score</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Led development and enablement of an enterprise Copilot-based solution that streamlined access to portfolio management materials, strengthened AI adoption, and achieved an 88% engagement score after rollout.</p><ul><li>Engaged directors of Portfolio Management to curate their materials into a standardized knowledge base.</li><li>Led UAT with operational directors to ensure a clean rollout and strong user adoption.</li><li>Delivered training to 100+ users.</li></ul></div>
+            </details>
+            <details class="xp" id="xp-board">
+              <summary><span class="xp-tag">Executive analytics</span><span class="xp-title">Board of Directors Analytics</span><span class="xp-line">Lead product manager and developer</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Served as lead product manager and developer for an enterprise analytics initiative presented to the McKesson Board of Directors, transforming legacy reporting into dynamic, executive-grade analytics.</p><ul><li>Partnered with the VPs of Enterprise Applications, IT Operations and Cybersecurity.</li><li>Developed custom metrics and an automated dashboard that replaced legacy manual reporting.</li><li>Led requirements meetings across VPs to keep data metrics and the reporting framework consistent.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Web application</span><span class="xp-title">QBR Reporting Web App</span><span class="xp-line">PowerPoint decks → custom web application</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Strategic partner and lead developer to the VP of Portfolio Management and portfolio directors, modernizing PowerPoint-based executive QBR reporting into dynamic custom web applications and automated reporting.</p><ul><li>Partnered with Portfolio Leads, Portfolio Directors and VPs to drive consistent QBR reporting to McKesson's CIO.</li><li>Built an interactive app with Service Area and reporting-period selection and KPI visualization.</li><li>Captured structured executive commentary: BLUFs, risks, actions, asks, owners and target dates.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Data quality</span><span class="xp-title">Financial Data Integrity</span><span class="xp-line">Caught discrepancies affecting executive KPIs</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Detected and escalated financial data inconsistencies impacting executive KPIs, collaborating with Finance management to drive resolution and improve reporting reliability.</p><ul><li>Discovered financial discrepancies in source files within the reporting workflow.</li><li>Partnered with Finance management and portfolio leaders to correct them.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Planning</span><span class="xp-title">Annual Planning Analytics</span><span class="xp-line">Full McKesson Technology project portfolio</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Drove enterprise-wide annual planning analytics, integrating OpEx/CapEx financials, project targets and KPI metrics so executive leadership could prioritize investments and check strategic alignment.</p><ul><li>Developed a standardized data model combining Planview and Smartsheet sources.</li><li>Ensured consistent, standardized metrics across the portfolio.</li></ul></div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="co">
+        <div class="co-head"><h3>J.R. Simplot Company</h3><span>Food &amp; agriculture</span></div>
+        <div class="job">
+          <div class="job-head"><h4>Data Science Analyst III <em>(Product Manager)</em></h4><span class="dates">Oct 2024 – Jul 2025</span></div>
+          <div class="xps">
+            <details class="xp" id="xp-cash">
+              <summary><span class="xp-tag">Treasury</span><span class="xp-title">Cash Forecasting Initiative</span><span class="xp-line">$3M+ interest avoided · $150M+ accuracy gain</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Directed a multi-billion-dollar cash forecasting initiative for Treasury, aligning Data Science, Data Engineering and business stakeholders to deliver an automated forecast.</p><ul><li>Integrated data from multiple ERP and data systems: SAP, JDE and legacy platforms.</li><li>Resolved critical data quality issues through validation, reconciliation and standardization.</li><li>Delivered a unified, high-accuracy cash forecast supporting executive decisions, saving over $3M in unneeded loan interest and improving forecast accuracy by $150M+.</li></ul></div>
+            </details>
+            <details class="xp" id="xp-chatbot">
+              <summary><span class="xp-tag">AI automation</span><span class="xp-title">AI Procurement Chatbot</span><span class="xp-line">Hundreds of support hours saved a year</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Designed and implemented an AI chatbot using a Copilot declarative agent to automate and streamline internal procurement workflows.</p><ul><li>Led end-to-end development in Microsoft Copilot Studio, integrated with procurement systems and released in Microsoft Teams.</li><li>Ran process-mapping sessions with procurement and support teams and curated source content in SharePoint.</li><li>Automated routine ticket submissions, approval workflows and status lookups.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Governance</span><span class="xp-title">AI Governance with Credo AI</span><span class="xp-line">Platform administrator</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Administered the Credo AI governance platform, reviewing internal and vendor models to ensure data is handled securely, ethically and in compliance with governance standards.</p><ul><li>Led governance reviews of AI in existing systems and from prospective vendors.</li><li>Conducted risk assessments and audits aligned with data security and privacy practices.</li><li>Worked with IT Security to evaluate and address vulnerabilities in AI systems and workflows.</li></ul></div>
+            </details>
+          </div>
+        </div>
+        <div class="job">
+          <div class="job-head"><h4>Business Intelligence Engineer II</h4><span class="dates">Apr 2023 – Oct 2024</span></div>
+          <div class="xps">
+            <details class="xp" id="xp-foodqa">
+              <summary><span class="xp-tag">Automation</span><span class="xp-title">Food Quality Data Automation</span><span class="xp-line">80+ hours saved a year</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>As lead product owner and engineer, modernized internal processes with IT, leadership and food quality teams, delivering automated data flows that improved quality assurance, data security and reporting.</p><ul><li>Integrated automated reporting and data validation for the McDonald's food quality assurance program.</li><li>Ran ongoing stakeholder feedback loops to keep iterating the Power BI solutions.</li><li>Championed Power Apps, Power BI and automation practices across the organization.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Dashboards</span><span class="xp-title">Farm Management Dashboards</span><span class="xp-line">Suite of Power BI dashboards</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Led product development of Power BI dashboards that improved data visibility across the farm management network, aligning IT, agricultural operations and executive teams.</p><ul><li>Integrated multiple data sources with IT and automated refresh cycles.</li><li>Built SQL CTEs, SQL views and custom DAX with engineering and product management.</li><li>Led UAT and iterated with the agricultural operations team.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Marketing analytics</span><span class="xp-title">RFM Customer Segmentation</span><span class="xp-line">Dynamic Recency-Frequency-Monetary model</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Developed a dynamic RFM model in Power BI to enable data-driven customer segmentation for marketing.</p><ul><li>Identified high-value, loyal and at-risk segments to drive personalized campaigns.</li><li>Visualized customer behavior so marketing could tailor messaging and promotions.</li><li>Trained marketing and sales teams to use RFM insights in decisions.</li></ul></div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="co">
+        <div class="co-head"><h3>Jacksons Food Stores</h3><span>Convenience retail · 1,000 stores</span></div>
+        <div class="job">
+          <div class="job-head"><h4>Sr. Business Intelligence Developer</h4><span class="dates">Oct 2022 – Apr 2023</span></div>
+          <div class="xps">
+            <details class="xp" id="xp-fraud">
+              <summary><span class="xp-tag">Machine learning</span><span class="xp-title">Fraud Detection Models</span><span class="xp-line">$2.5M saved across 1,000 stores</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Directed the design and implementation of machine learning models to detect fraudulent transactions across 1,000 stores, saving $2.5M in theft losses.</p><ul><li>Integrated the models with POS systems and data pipelines alongside IT and Data Science.</li><li>Worked with store managers on improved security protocols, training and operations.</li><li>Reported ROI and cost savings to senior leadership and presented results to store managers across seven states.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Strategy</span><span class="xp-title">Data Science Roadmap</span><span class="xp-line">Aligned IT, Marketing and HR</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Created a comprehensive data science roadmap with department heads from IT, Marketing and HR, giving clear strategic direction and efficient resource allocation.</p><ul><li>Prioritized projects by business value to optimize budget and execution.</li><li>Communicated the roadmap and expected outcomes to senior leadership to secure buy-in.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Administration</span><span class="xp-title">Power BI Administration</span><span class="xp-line">Security, access and data integrity</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Managed Power BI administration for the BI team, implementing security protocols, overseeing access controls and maintaining data integrity across all reports.</p><ul><li>Set up, configured and maintained all Power BI environments.</li><li>Enforced security protocols for sensitive data in line with internal and external requirements.</li><li>Guided the BI team on security and integrity best practices.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Marketing analytics</span><span class="xp-title">Promotional Punch-Card Dashboards</span><span class="xp-line">Campaign optimization</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Led Power BI dashboards for promotional punch-card data with Marketing, IT and Category Management to optimize campaigns and customer engagement.</p><ul><li>Defined key metrics, requirements and goals with each team.</li><li>Analyzed punch-card trends and recommended campaign changes.</li><li>Monitored adoption after launch and iterated with new features.</li></ul></div>
+            </details>
+          </div>
+        </div>
+        <div class="job">
+          <div class="job-head"><h4>Business Intelligence Developer</h4><span class="dates">May 2020 – Oct 2022</span></div>
+          <div class="xps">
+            <details class="xp" id="xp-basket">
+              <summary><span class="xp-tag">Transaction analytics</span><span class="xp-title">Market Basket Analysis</span><span class="xp-line">Stronger supplier price negotiations</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Managed end-to-end design of market basket data models, leading analysts and category managers in transactional analysis across 1,000 stores.</p><ul><li>Directed the team collecting and analyzing transaction data for the category team.</li><li>Streamlined the pipeline for real-time access to transaction data.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Loyalty</span><span class="xp-title">Customer Lifetime Value Models</span><span class="xp-line">Value drivers and purchase patterns</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Developed loyalty reporting models forecasting customer lifetime value and revealing key value drivers and purchase behavior.</p><ul><li>Identified high-value and at-risk customers to improve segmentation and retention.</li><li>Analyzed historical purchases to focus the business on its most profitable segments.</li></ul></div>
+            </details>
+            <details class="xp" id="xp-training">
+              <summary><span class="xp-tag">Enablement</span><span class="xp-title">Power BI Training &amp; Adoption</span><span class="xp-line">Go-to subject-matter expert</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Spearheaded Power BI training for business stakeholders, designing and leading interactive workshops across departments.</p><ul><li>Wrote training materials, user guides and best-practice documentation.</li><li>Ran hands-on sessions that increased engagement and accelerated adoption.</li></ul></div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="co">
+        <div class="co-head"><h3>Boise State University · BASE</h3><span>Business Analytics Service Experience</span></div>
+        <div class="job">
+          <div class="job-head"><h4>Community Engagement Consultant</h4><span class="dates">Jun 2022 – Present</span></div>
+          <div class="xps">
+            <details class="xp">
+              <summary><span class="xp-tag">Consulting</span><span class="xp-title">Nonprofit Analytics Projects</span><span class="xp-line">Students × Boise nonprofits</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Advise business analytics students on data analysis, problem-solving and industry practice while partnering with Boise nonprofits.</p><ul><li>Help students design and deliver analysis projects and communicate recommendations.</li><li>Bridge academia and industry by applying classroom concepts to real business problems.</li></ul></div>
+            </details>
+            <details class="xp">
+              <summary><span class="xp-tag">Mentorship</span><span class="xp-title">Career Mentorship</span><span class="xp-line">Internships and post-graduate placements</span><span class="xp-more" aria-hidden="true"></span></summary>
+              <div class="xp-body"><p>Mentor graduate and undergraduate business analytics candidates toward internships and post-graduation success.</p><ul><li>Provide one-on-one career guidance.</li><li>Coach job search strategy, interview preparation and resumes.</li></ul></div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="label">Personal Work</div>
+    <div class="work">
+      <a class="card" href="work/retail-markdown.html">
+        <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
+          <line class="gl" x1="100" y1="16" x2="100" y2="134"/>
+          <g><rect class="g" x="40" y="24" width="120" height="10" rx="2"/><line class="s" x1="80" y1="29" x2="140" y2="29"/><circle class="f" cx="112" cy="29" r="5"/></g>
+          <g><line class="s" x1="70" y1="52" x2="118" y2="52"/><circle class="f" cx="94" cy="52" r="5"/></g>
+          <g><line class="s" x1="96" y1="75" x2="150" y2="75"/><circle class="f" cx="124" cy="75" r="5"/></g>
+          <g><line class="s" x1="56" y1="98" x2="104" y2="98"/><circle class="f" cx="78" cy="98" r="5"/></g>
+          <g><line class="s" x1="88" y1="121" x2="132" y2="121"/><circle class="f" cx="108" cy="121" r="5"/></g>
+        </svg></span>
+        <div class="body">
+          <span class="kind">DASHBOARD · RETAIL</span>
+          <h3>Markdown Drivers</h3>
+          <p>What drives markdown spend across a 45-store chain? Tests holidays, temperature, fuel price, CPI and unemployment, controls for the holiday effect, and lays out the findings with a correlation forest plot, factor matrix, holiday comparison and store-level appendix.</p>
+          <div class="specs"><span><span class="num">45</span> stores</span><span>weekly, <span class="num">Feb 2010 – Jul 2013</span></span><span>markdowns from <span class="num">Nov 2011</span></span></div>
+          <div class="chips"><span class="chip">D3.js</span><span class="chip">Correlation analysis</span><span class="chip">HTML/CSS</span></div>
+          <span class="open">Open dashboard →</span>
+        </div>
+      </a>
+
+      <a class="card" href="work/portfolio-manager.html">
+        <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
+          <line class="gl" x1="16" y1="40" x2="184" y2="40"/><line class="gl" x1="16" y1="75" x2="184" y2="75"/><line class="gl" x1="16" y1="110" x2="184" y2="110"/>
+          <path class="s" d="M16 112 L36 104 L52 108 L70 92 L88 96 L104 80 L122 84 L138 66 L156 60 L170 48 L184 38"/>
+          <path class="s" style="opacity:.45" d="M16 116 L36 110 L52 114 L70 102 L88 104 L104 94 L122 96 L138 84 L156 80 L170 70 L184 64"/>
+          <rect class="g" x="16" y="122" width="168" height="12" rx="6"/><rect class="f" x="16" y="122" width="100" height="12" rx="6"/>
+        </svg></span>
+        <div class="body">
+          <span class="kind">TOOL · FINANCE</span>
+          <h3>SPY / QQQ Portfolio Manager</h3>
+          <p>An interactive allocation model: drag the SPY/QQQ split and growth, drawdown, rolling volatility, monthly returns and dividends recalculate. EMA-20 / SMA-50 crossover signals flag trend changes, and a market news panel summarizes the headlines moving both funds.</p>
+          <div class="specs"><span><span class="num">2</span> ETFs</span><span>daily, <span class="num">Nov 2025 – Nov 2026</span></span><span>EMA <span class="num">20</span> · SMA <span class="num">50</span></span></div>
+          <div class="chips"><span class="chip">D3.js</span><span class="chip">Time series</span><span class="chip">Risk metrics</span><span class="chip">News summary</span></div>
+          <span class="open">Open tool →</span>
+        </div>
+      </a>
+
+      <a class="card" href="work/training-app.html">
+        <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
+          <g id="cal">
+            <rect class="g" x="20" y="22" width="26" height="22" rx="3"/><rect class="f" x="52" y="22" width="26" height="22" rx="3"/><rect class="f" x="84" y="22" width="26" height="22" rx="3"/><rect class="g" x="116" y="22" width="26" height="22" rx="3"/><rect class="f" x="148" y="22" width="26" height="22" rx="3"/>
+            <rect class="f" x="20" y="50" width="26" height="22" rx="3"/><rect class="f" x="52" y="50" width="26" height="22" rx="3"/><rect class="g" x="84" y="50" width="26" height="22" rx="3"/><rect class="f" x="116" y="50" width="26" height="22" rx="3"/><rect class="f" x="148" y="50" width="26" height="22" rx="3"/>
+            <rect class="g" x="20" y="78" width="26" height="22" rx="3"/><rect class="g" x="52" y="78" width="26" height="22" rx="3"/><rect class="g" x="84" y="78" width="26" height="22" rx="3"/><rect class="g" x="116" y="78" width="26" height="22" rx="3"/><rect class="g" x="148" y="78" width="26" height="22" rx="3"/>
+          </g>
+          <path class="s" d="M20 128 L60 122 L100 124 L140 116 L174 112"/>
+        </svg></span>
+        <div class="body">
+          <span class="kind">WEB APP · PERSONAL</span>
+          <h3>8-Week Training Program</h3>
+          <p>A calendar-driven workout app. Targets are computed from each lift's one-rep max, sets are logged as you go, and a rest timer, day rescheduling, exercise swaps and a body-weight trend keep the plan honest.</p>
+          <div class="specs"><span><span class="num">8</span> weeks</span><span><span class="num">5</span>-day cycle</span><span>targets from <span class="num">1RM</span></span></div>
+          <div class="chips"><span class="chip">JavaScript</span><span class="chip">State &amp; persistence</span><span class="chip">Mobile-first UI</span></div>
+          <span class="open">Open app →</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Skills</div>
+    <div class="skills">
+      <div><h3>BI &amp; Data</h3><p>Power BI, DAX, SQL, Python, Databricks, data lake architecture, Planview, SAP</p></div>
+      <div><h3>AI &amp; Automation</h3><p>Copilot Studio, declarative agents, Power Platform, large language models, AI governance (Credo AI)</p></div>
+      <div><h3>Analytics</h3><p>Machine learning, fraud detection, forecasting, customer lifetime value, RFM, loyalty and transaction analytics</p></div>
+      <div><h3>Leadership</h3><p>Product ownership, project management, executive and board reporting, UAT, training and adoption</p></div>
+      <div><h3>Web &amp; Visualization</h3><p>React, Recharts, D3.js, HTML/CSS/JavaScript, as in the work samples above</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Education</div>
+    <div class="eds">
+        <div class="ed"><div class="ed-top"><span class="xp-tag">Graduate degree</span><span class="dates">2021</span></div><b class="ed-title">Master of Business Administration</b><span class="ed-school">Boise State University</span><ul class="ed-meta"><li>GPA <span class="num">3.89</span></li><li>Vice President, MBA Student Association</li></ul></div>
+        <div class="ed"><div class="ed-top"><span class="xp-tag">Undergraduate degree</span><span class="dates">2019</span></div><b class="ed-title">BS, Digital Marketing &amp; Advertising</b><span class="ed-school">Liberty University</span><ul class="ed-meta"><li>Minor in Information Systems</li><li>GPA <span class="num">3.85</span> · Magna Cum Laude</li><li>Delta Mu Delta Honor Society</li></ul></div>
+        <div class="ed"><div class="ed-top"><span class="xp-tag">Certificate</span><span class="dates">2020</span></div><b class="ed-title">Data Science &amp; Big Data Analytics</b><span class="ed-school">Massachusetts Institute of Technology</span><ul class="ed-meta"><li>Making Data-Driven Decisions</li></ul></div>
+        <div class="ed"><div class="ed-top"><span class="xp-tag">Certification</span><span class="dates">2022</span></div><b class="ed-title">Power BI Data Analyst (PL-300)</b><span class="ed-school">Microsoft</span><ul class="ed-meta"><li>Microsoft Certified</li></ul></div>
+    </div>
+    <div class="cr">
+      <h3 class="cr-h">Continuing Education</h3>
+      <ul class="cr-list"><li><span class="cr-name">AI Leadership</span><span class="cr-src">DataCamp</span><span class="dates">2025</span></li><li><span class="cr-name">Intermediate Python</span><span class="cr-src">DataCamp</span><span class="dates">2025</span></li><li><span class="cr-name">Introduction to Databricks</span><span class="cr-src">DataCamp</span><span class="dates">2025</span></li><li><span class="cr-name">Microsoft Azure Machine Learning</span><span class="cr-src">Coursera</span><span class="dates">2022</span></li><li><span class="cr-name">SQL for Data Science</span><span class="cr-src">Coursera</span><span class="dates">2022</span></li><li><span class="cr-name">Creating Customers for Life</span><span class="cr-src">Stanford Continuing Studies</span><span class="dates">2022</span></li></ul>
+    </div>
+  </section>
+
+  <footer><span>Samuel Beaman · Boise, Idaho</span><span>Work samples are live: open any card above.</span></footer>
+</div>
+
+<script>
+document.getElementById('copy').addEventListener('click', function(){
+  var btn=this, txt=document.getElementById('email').textContent;
+  function done(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy'},1600)}
+  function fallback(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected'}
+  try{navigator.clipboard.writeText(txt).then(done,fallback)}catch(e){fallback()}
+});
+
+(function(){var btn=document.getElementById('xpall');if(!btn)return;var all=document.querySelectorAll('details.xp');
+function sync(){var open=[].every.call(all,function(d){return d.open});btn.textContent=open?'Collapse all':'Expand all'}
+btn.addEventListener('click',function(){var open=[].every.call(all,function(d){return d.open});all.forEach(function(d){d.open=!open});sync()});
+all.forEach(function(d){d.addEventListener('toggle',sync)})})();
+
+document.querySelectorAll('a.win').forEach(function(a){a.addEventListener('click',function(e){var d=document.getElementById(a.getAttribute('href').slice(1));if(!d)return;e.preventDefault();d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'});d.classList.add('flash');setTimeout(function(){d.classList.remove('flash')},1800);var sm=d.querySelector('summary');if(sm)sm.focus({preventScroll:true})})});
+
+(function(){try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}if(!location.hash){var go=function(){window.scrollTo(0,0);var h=document.querySelector('header');if(h&&h.scrollIntoView)h.scrollIntoView({block:'start'})};go();window.addEventListener('load',go)}})();
+</script>
+
+</body></html>
