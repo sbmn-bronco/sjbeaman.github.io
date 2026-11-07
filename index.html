@@ -1,6 +1,11 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Samuel Beaman: Enterprise Analytics &amp; Business Intelligence Leader, AI Enablement, Data Strategy. Resume and live work samples.">
+<style>body{margin:0}img{max-width:100%}</style>
 <title>Samuel Beaman · Analytics</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -62,8 +67,8 @@ section > .label{padding-bottom:10px;border-bottom:1px solid var(--rule)}
 .job p{margin:0;color:var(--muted);max-width:68ch}
 
 /* work */
-.work{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:960px){.work{grid-template-columns:1fr}}
+.work{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.work{grid-template-columns:1fr}}
 .card{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:18px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px;text-decoration:none;color:inherit;transition:border-color .15s, transform .15s}
 .card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -178,6 +183,8 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
   .page{padding-block:32px 48px;gap:44px}
 }
 </style>
+</head>
+<body>
 
 <div class="page">
   <header>
@@ -351,7 +358,7 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
   </section>
 
   <section id="work">
-    <div class="label">Personal Work</div>
+    <div class="label">Personal Portfolio</div>
     <div class="work">
       <a class="card" href="work/retail-markdown.html">
         <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
@@ -407,6 +414,27 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
           <span class="open">Open app →</span>
         </div>
       </a>
+
+      <a class="card" href="work/cashflow-ledger.html">
+        <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
+          <line class="gl" x1="16" y1="122" x2="184" y2="122"/>
+          <rect class="g" x="24" y="62" width="12" height="60" rx="2"/><rect class="f" x="38" y="74" width="12" height="48" rx="2"/>
+          <rect class="g" x="64" y="58" width="12" height="64" rx="2"/><rect class="f" x="78" y="66" width="12" height="56" rx="2"/>
+          <rect class="g" x="104" y="60" width="12" height="62" rx="2"/><rect class="f" x="118" y="86" width="12" height="36" rx="2"/>
+          <rect class="g" x="144" y="56" width="12" height="66" rx="2"/><rect class="f" x="158" y="70" width="12" height="52" rx="2"/>
+          <path class="s" d="M37 100 L77 104 L117 84 L157 94"/>
+          <circle class="f" cx="37" cy="100" r="3"/><circle class="f" cx="77" cy="104" r="3"/><circle class="f" cx="117" cy="84" r="3"/><circle class="f" cx="157" cy="94" r="3"/>
+          <rect class="g" x="24" y="24" width="60" height="8" rx="4"/><rect class="g" x="24" y="38" width="40" height="8" rx="4"/>
+        </svg></span>
+        <div class="body">
+          <span class="kind">WEB APP · PERSONAL FINANCE</span>
+          <h3>Cashflow Ledger</h3>
+          <p>Drop in bank and credit card CSV exports and every transaction is auto-categorized. Pick a month to see income, expenses, net cashflow and savings rate, where the money went, and which categories changed most from the prior month. Opens with fictional sample data.</p>
+          <div class="specs"><span><span class="num">17</span> categories</span><span><span class="num">12</span>-month trend</span><span>month-over-month change</span></div>
+          <div class="chips"><span class="chip">Chart.js</span><span class="chip">CSV parsing</span><span class="chip">Rules-based categorization</span></div>
+          <span class="open">Open app →</span>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -456,4 +484,5 @@ document.querySelectorAll('a.win').forEach(function(a){a.addEventListener('click
 (function(){try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}if(!location.hash){var go=function(){window.scrollTo(0,0);var h=document.querySelector('header');if(h&&h.scrollIntoView)h.scrollIntoView({block:'start'})};go();window.addEventListener('load',go)}})();
 </script>
 
-</body></html>
+</body>
+</html>
