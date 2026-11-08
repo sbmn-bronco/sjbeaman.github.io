@@ -528,7 +528,10 @@ document.querySelectorAll('a.win').forEach(function(a){a.addEventListener('click
   function lookup(u, map) {
     return fetch(u).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(map);
   }
-  setTimeout(function () { send({}); }, 3000);   // never wait longer than 3 seconds
+  setTimeout(function () { send({}); }, 1500);   // never wait longer than 1.5 seconds
+  // If they leave or switch tabs before the lookup finishes, send right away.
+  addEventListener('pagehide', function () { send({}); });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') send({}); });
   try {
     lookup('https://ipinfo.io/json', function (j) {
       return { org: (j.org || '').replace(/^AS\d+\s*/, ''), city: j.city, region: j.region, country: j.country };
