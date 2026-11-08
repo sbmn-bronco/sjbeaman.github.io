@@ -315,7 +315,7 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
     openai: ['How has he driven AI adoption?', 'What AI tools has he built?', 'How does he handle AI governance?'],
     anthropic: ['How does he ensure data accuracy?', 'What financial reporting has he owned?', 'Has he worked with SAP?'],
     meta: ['What SQL and data modeling has he done?', 'Show me his data pipeline work', 'What product analytics has he built?'],
-    base: ['Has he led AI adoption at a large company?', 'What has he built for executives?', 'What does his SQL work look like?']
+    base: ["What's the biggest impact he's had at McKesson?", 'How has he used AI to change how teams work?', 'What has he built for senior executives?']
   };
   var sugs = /openai/.test(ref) ? sets.openai : /anthropic/.test(ref) ? sets.anthropic : /meta/.test(ref) ? sets.meta : sets.base;
   $('#askSugs').innerHTML = sugs.map(function (q) { return '<button type="button" class="ask-sug">' + esc(q) + '</button>'; }).join('');
