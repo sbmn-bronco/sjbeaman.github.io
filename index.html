@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Samuel Beaman: Enterprise Analytics &amp; Business Intelligence Leader, AI Enablement, Data Strategy. Resume and live work samples.">
+<style>body{margin:0}img{max-width:100%}</style>
 <title>Samuel Beaman · Analytics</title>
-<style>[hidden]{display:none!important}body{margin:0}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -182,6 +183,8 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
   .page{padding-block:32px 48px;gap:44px}
 }
 </style>
+</head>
+<body>
 
 <div class="page">
   <header>
@@ -319,7 +322,7 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
           <div class="xps">
             <details class="xp" id="xp-basket">
               <summary><span class="xp-tag">Transaction analytics</span><span class="xp-title">Market Basket Analysis</span><span class="xp-line">Stronger supplier price negotiations</span><span class="xp-more" aria-hidden="true"></span></summary>
-              <div class="xp-body"><p>Managed end-to-end design of market basket data models, leading analysts and category managers in transactional analysis across 1,000 stores.</p><ul><li>Directed the team collecting and analyzing transaction data for the category team.</li><li>Streamlined the pipeline for real-time access to transaction data.</li></ul><p><a href="work/market-basket.html">See a live market basket demo →</a></p></div>
+              <div class="xp-body"><p>Managed end-to-end design of market basket data models, leading analysts and category managers in transactional analysis across 1,000 stores.</p><ul><li>Directed the team collecting and analyzing transaction data for the category team.</li><li>Streamlined the pipeline for real-time access to transaction data.</li></ul></div>
             </details>
             <details class="xp">
               <summary><span class="xp-tag">Loyalty</span><span class="xp-title">Customer Lifetime Value Models</span><span class="xp-line">Value drivers and purchase patterns</span><span class="xp-more" aria-hidden="true"></span></summary>
@@ -357,20 +360,21 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
   <section id="work">
     <div class="label">Personal Portfolio</div>
     <div class="work">
-      <a class="card" href="work/market-basket.html">
+      <a class="card" href="https://claude.ai/artifact/DeGQ4hHspQcaNom2FodYeZ" target="_blank" rel="noopener">
         <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
-          <line class="gl" x1="40" y1="40" x2="100" y2="75"/><line class="gl" x1="100" y1="75" x2="160" y2="38"/><line class="gl" x1="100" y1="75" x2="58" y2="118"/><line class="gl" x1="100" y1="75" x2="150" y2="114"/><line class="gl" x1="40" y1="40" x2="58" y2="118"/>
-          <line class="s" x1="40" y1="40" x2="100" y2="75"/><line class="s" x1="100" y1="75" x2="150" y2="114"/>
-          <circle class="g" cx="160" cy="38" r="10"/><circle class="g" cx="58" cy="118" r="12"/>
-          <circle class="f" cx="40" cy="40" r="9"/><circle class="f" cx="100" cy="75" r="15"/><circle class="f" cx="150" cy="114" r="8"/>
+          <line class="gl" x1="56" y1="46" x2="104" y2="74" style="opacity:.6;stroke-width:3"/><line class="gl" x1="104" y1="74" x2="150" y2="44" style="opacity:.45;stroke-width:2"/>
+          <line class="gl" x1="104" y1="74" x2="140" y2="112" style="opacity:.6;stroke-width:3"/><line class="gl" x1="104" y1="74" x2="62" y2="108" style="opacity:.35;stroke-width:2"/>
+          <line class="gl" x1="56" y1="46" x2="62" y2="108" style="opacity:.3"/><line class="gl" x1="150" y1="44" x2="140" y2="112" style="opacity:.3"/>
+          <circle class="f" cx="104" cy="74" r="14"/><circle class="f" cx="56" cy="46" r="9"/><circle class="g" cx="150" cy="44" r="10"/>
+          <circle class="f" cx="140" cy="112" r="8"/><circle class="g" cx="62" cy="108" r="11"/><circle class="g" cx="30" cy="80" r="5"/><circle class="g" cx="176" cy="82" r="6"/>
         </svg></span>
         <div class="body">
           <span class="kind">DASHBOARD · RETAIL</span>
           <h3>Grocery Market Basket Analysis</h3>
-          <p>Which products pull each other into the basket? Mines association rules from grocery transactions and ranks them by support, confidence and lift, rolls items up to departments, and turns the strongest affinities into executive findings and merchandising plays.</p>
-          <div class="specs"><span><span class="num">9,835</span> transactions</span><span><span class="num">169</span> items</span><span><span class="num">4,143</span> rules</span></div>
-          <div class="chips"><span class="chip">D3.js</span><span class="chip">Association rules</span><span class="chip">Lift analysis</span><span class="chip">Python</span></div>
-          <span class="open">Open dashboard →</span>
+          <p>Which products sell together? Mines association rules from 9,835 grocery receipts and ranks product pairs by support, confidence and lift, with category affinities, basket-size distribution and the items that anchor the most baskets: the analysis behind cross-merchandising and promotion decisions.</p>
+          <div class="specs"><span><span class="num">9,835</span> baskets</span><span><span class="num">169</span> products</span><span>avg basket <span class="num">4.41</span> items</span></div>
+          <div class="chips"><span class="chip">Association rules</span><span class="chip">Support · Confidence · Lift</span><span class="chip">Dashboard</span></div>
+          <span class="open">Open dashboard ↗</span>
         </div>
       </a>
 
@@ -478,5 +482,6 @@ document.querySelectorAll('a.win').forEach(function(a){a.addEventListener('click
 
 (function(){try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}if(!location.hash){var go=function(){window.scrollTo(0,0);var h=document.querySelector('header');if(h&&h.scrollIntoView)h.scrollIntoView({block:'start'})};go();window.addEventListener('load',go)}})();
 </script>
+
 </body>
 </html>
