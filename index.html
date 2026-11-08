@@ -360,7 +360,7 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
   <section id="work">
     <div class="label">Personal Portfolio</div>
     <div class="work">
-      <a class="card" href="https://claude.ai/artifact/DeGQ4hHspQcaNom2FodYeZ" target="_blank" rel="noopener">
+      <a class="card" href="work/market-basket.html">
         <span class="thumb" aria-hidden="true"><svg viewBox="0 0 200 150">
           <line class="gl" x1="56" y1="46" x2="104" y2="74" style="opacity:.6;stroke-width:3"/><line class="gl" x1="104" y1="74" x2="150" y2="44" style="opacity:.45;stroke-width:2"/>
           <line class="gl" x1="104" y1="74" x2="140" y2="112" style="opacity:.6;stroke-width:3"/><line class="gl" x1="104" y1="74" x2="62" y2="108" style="opacity:.35;stroke-width:2"/>
@@ -373,8 +373,8 @@ footer{border-top:1px solid var(--rule);padding-top:20px;font-size:13px;color:va
           <h3>Grocery Market Basket Analysis</h3>
           <p>Which products sell together? Mines association rules from 9,835 grocery receipts and ranks product pairs by support, confidence and lift, with category affinities, basket-size distribution and the items that anchor the most baskets: the analysis behind cross-merchandising and promotion decisions.</p>
           <div class="specs"><span><span class="num">9,835</span> baskets</span><span><span class="num">169</span> products</span><span>avg basket <span class="num">4.41</span> items</span></div>
-          <div class="chips"><span class="chip">Association rules</span><span class="chip">Support · Confidence · Lift</span><span class="chip">Dashboard</span></div>
-          <span class="open">Open dashboard ↗</span>
+          <div class="chips"><span class="chip">Association rules</span><span class="chip">Support · Confidence · Lift</span><span class="chip">Heatmap</span></div>
+          <span class="open">Open dashboard →</span>
         </div>
       </a>
 
@@ -483,5 +483,40 @@ document.querySelectorAll('a.win').forEach(function(a){a.addEventListener('click
 (function(){try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}if(!location.hash){var go=function(){window.scrollTo(0,0);var h=document.querySelector('header');if(h&&h.scrollIntoView)h.scrollIntoView({block:'start'})};go();window.addEventListener('load',go)}})();
 </script>
 
+<script>
+/* Visit alerts: sends to your Google Apps Script web app. */
+(function () {
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycby-cEKUYUybQ1nK3MwNNckIxFdSomsvr6OXDQisNcEDcP1Mqu5VolyS65yFAPhOyYszsA/exec';
+
+  if (!/^https:\/\/script\.google\.com\//.test(ENDPOINT)) return;
+  var q = new URLSearchParams(location.search), store = null;
+  try { store = window.localStorage; store.getItem('x'); } catch (e) { store = null; }
+  function get(k) { try { return store ? store.getItem(k) : null; } catch (e) { return null; } }
+  function set(k, v) { try { if (store) store.setItem(k, v); } catch (e) {} }
+
+  // Visit the site once with ?me=1 so your own visits never send an email (?me=0 undoes it).
+  if (q.get('me') === '1') set('sb_me', '1');
+  if (q.get('me') === '0') { try { store && store.removeItem('sb_me'); } catch (e) {} }
+  if (get('sb_me')) return;
+
+  var d = new Date(), today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  if (q.get('ref')) set('sb_ref', q.get('ref'));
+  if (get('sb_day') === today) return;               // already reported today
+  var vid = get('sb_vid');
+  if (!vid) { vid = Math.random().toString(36).slice(2) + Date.now().toString(36); set('sb_vid', vid); }
+  var first = get('sb_first') || today; set('sb_first', first);
+  set('sb_day', today);
+
+  var params = new URLSearchParams({
+    vid: vid, first: first, ref: q.get('ref') || get('sb_ref') || '',
+    page: document.title || location.pathname, referrer: document.referrer || '',
+    ua: navigator.userAgent, lang: navigator.language || '',
+    screen: screen.width + 'x' + screen.height,
+    tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || '')
+  });
+  try { fetch(ENDPOINT + '?' + params.toString(), { mode: 'no-cors', keepalive: true }).catch(function () {}); }
+  catch (e) { new Image().src = ENDPOINT + '?' + params.toString(); }
+})();
+</script>
 </body>
 </html>
