@@ -734,15 +734,37 @@ window.MB_DATA = {"kpis":{"c":["transactions","unique_items","avg_basket_size","
   var first = get('sb_first') || today; set('sb_first', first);
   set('sb_day', today);
 
-  var params = new URLSearchParams({
+  var base = {
     vid: vid, first: first, ref: q.get('ref') || get('sb_ref') || '',
     page: document.title || location.pathname, referrer: document.referrer || '',
     ua: navigator.userAgent, lang: navigator.language || '',
     screen: screen.width + 'x' + screen.height,
     tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || '')
-  });
-  try { fetch(ENDPOINT + '?' + params.toString(), { mode: 'no-cors', keepalive: true }).catch(function () {}); }
-  catch (e) { new Image().src = ENDPOINT + '?' + params.toString(); }
+  };
+  var sent = false;
+  function send(net) {
+    if (sent) return; sent = true;
+    var all = {}, k;
+    for (k in base) all[k] = base[k];
+    for (k in (net || {})) if (net[k]) all[k] = String(net[k]);
+    var url = ENDPOINT + '?' + new URLSearchParams(all).toString().replace(/\+/g, '%20');
+    try { fetch(url, { mode: 'no-cors', keepalive: true }).catch(function () {}); }
+    catch (e) { new Image().src = url; }
+  }
+  // Look up the network (company or internet provider) behind the visitor's connection.
+  function lookup(u, map) {
+    return fetch(u).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(map);
+  }
+  setTimeout(function () { send({}); }, 3000);   // never wait longer than 3 seconds
+  try {
+    lookup('https://ipinfo.io/json', function (j) {
+      return { org: (j.org || '').replace(/^AS\d+\s*/, ''), city: j.city, region: j.region, country: j.country };
+    }).catch(function () {
+      return lookup('https://ipapi.co/json/', function (j) {
+        return { org: j.org, city: j.city, region: j.region, country: j.country_code };
+      });
+    }).then(send, function () { send({}); });
+  } catch (e) { send({}); }
 })();
 </script>
 </body>
