@@ -1,8 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<style>
+.rs-back{--rb-bg:#f6f7f9;--rb-fg:#141821;--rb-mu:#5a6272;--rb-ac:#1f4fd1;--rb-ru:#dde1e8;
+ display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+ background:var(--rb-bg);border-bottom:1px solid var(--rb-ru);
+ padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+ font:500 14px/1.3 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;position:relative;z-index:50}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rs-back{--rb-bg:#0e1117;--rb-fg:#e7eaf0;--rb-mu:#a0a8b8;--rb-ac:#7c9cff;--rb-ru:#262d3a}}
+:root[data-theme="dark"] .rs-back{--rb-bg:#0e1117;--rb-fg:#e7eaf0;--rb-mu:#a0a8b8;--rb-ac:#7c9cff;--rb-ru:#262d3a}
+.rs-back a{color:var(--rb-ac);text-decoration:none;font-weight:600}
+.rs-back a:hover{text-decoration:underline;text-underline-offset:3px}
+.rs-back span{color:var(--rb-mu)}
+</style>
+<nav class="rs-back" aria-label="Back to resume"><a href="../index.html#work">&larr; Back to resume</a><span>Samuel Beaman &middot; Work sample</span></nav>
+<script>
+(function(){try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+function top(){try{window.scrollTo(0,0);var n=document.querySelector('.rs-back');if(n&&n.scrollIntoView)n.scrollIntoView({block:'start'});document.documentElement.scrollTop=0;document.body&&(document.body.scrollTop=0)}catch(e){}}
+top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',function(){top();setTimeout(top,60);setTimeout(top,300)});window.addEventListener('pageshow',top);
+})();
+</script>
+
 <title>Cashflow Ledger</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,21 +107,6 @@ header.top p{margin:4px 0 0;color:var(--muted);max-width:60ch}
 .bd-row .bar span{display:block;height:100%;background:var(--accent);border-radius:3px}
 .bd-row .pct{color:var(--muted);font-size:.78rem;margin-left:6px}
 
-.review{gap:14px}
-.review .lede{font-family:var(--f-display);font-size:1.15rem;font-weight:500;margin:0;max-width:70ch;text-wrap:pretty}
-.review .progress{font-size:.8rem;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:2px 10px;width:fit-content}
-.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.sum-col{display:flex;flex-direction:column;gap:8px;min-width:0}
-.sum-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.sum-col li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;line-height:1.45}
-.sum-col li::before{content:"";width:22px;height:22px;border-radius:6px;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-size:.75rem;font-weight:700;font-family:var(--f-num)}
-.sum-col li.t-up::before{content:"▲";background:var(--neg-soft);color:var(--neg)}
-.sum-col li.t-down::before{content:"▼";background:var(--pos-soft);color:var(--pos)}
-.sum-col li.t-info::before{content:"i";background:var(--accent-soft);color:var(--accent)}
-.sum-col li.t-act::before{content:"→";background:var(--accent);color:var(--surface)}
-.sum-col li.t-good::before{content:"✓";background:var(--pos-soft);color:var(--pos)}
-.sum-col li b{font-weight:600}
-.recs{background:var(--surface-2);border-radius:10px;padding:14px}
 .summary-line{margin:0;max-width:75ch}
 .summary-line b{font-weight:600}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
@@ -132,7 +133,7 @@ tr.down .spark{color:var(--pos)}
 .note{font-size:.8rem;color:var(--muted)}
 
 @media (max-width:900px){
-  .intake,.grid2,.sum-grid{grid-template-columns:1fr}
+  .intake,.grid2{grid-template-columns:1fr}
   .kpis{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:480px){
@@ -142,9 +143,7 @@ tr.down .spark{color:var(--pos)}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}[hidden]{display:none!important}</style>
-</head>
-<body>
+
 <div class="wrap">
   <header class="top">
     <div>
@@ -188,17 +187,6 @@ tr.down .spark{color:var(--pos)}
 
     <div style="height:14px"></div>
     <div class="kpis" id="kpis"></div>
-    <div style="height:18px"></div>
-
-    <section class="panel review" aria-label="Month in review">
-      <div class="panel-head"><h2 id="sumTitle">Month in review</h2><span class="progress" id="sumProgress" hidden></span></div>
-      <p class="lede" id="sumLede"></p>
-      <div class="sum-grid">
-        <div class="sum-col"><div class="eyebrow">What changed</div><ul id="sumFacts"></ul></div>
-        <div class="sum-col recs"><div class="eyebrow">Recommendations</div><ul id="sumRecs"></ul></div>
-      </div>
-      <div class="note">Compared with your average for the previous three months. A charge counts as unusual when it is well above what you normally pay that merchant or category.</div>
-    </section>
     <div style="height:18px"></div>
 
     <div class="grid2">
@@ -260,7 +248,7 @@ const RULES = [
   [/FUELSTOP|QUIKFILL|COSTCO GAS|MAVERIK|CHEVRON|SHELL|EXXON|STINKER|JACKSONS|SINCLAIR|VALVOLINE|JIFFY|AUTOZONE|O.?REILLY|DISCOUNT TIRE|DMV|PARKING|UBER(?! EATS)|LYFT/, "Gas & Auto"],
   [/SKILLET|QUICKBITE|STARBUCKS|DUTCH BROS|MCDONALD|CHIPOTLE|TACO|PIZZA|GRILL|CAFE|COFFEE|RESTAURANT|BURGER|SUSHI|DOORDASH|UBER EATS|GRUBHUB|BAR & |BREW|KITCHEN|DINER|CHICK-FIL|WENDY|SUBWAY|PANDA/, "Dining"],
   [/MEGAMART|GENERAL STORE|AMAZON|AMZN|TARGET|BEST BUY|WALMART|KOHL|NORDSTROM|REI\b|ETSY|EBAY|IKEA|MARSHALLS|TJ MAXX|ROSS/, "Shopping"],
-  [/GYM|FITNESS|CROSSFIT|ORANGETHEORY|PELOTON|WALGREENS|CVS|PHARMACY|ST LUKE|SAINT ALPHONSUS|DENTAL|CLINIC|IMAGING|HOSPITAL|OPTOMETR|MEDICAL/, "Health & Fitness"],
+  [/GYM|FITNESS|CROSSFIT|ORANGETHEORY|PELOTON|WALGREENS|CVS|PHARMACY|ST LUKE|SAINT ALPHONSUS|DENTAL|CLINIC|HOSPITAL|OPTOMETR|MEDICAL/, "Health & Fitness"],
   [/INSURANCE|STATE FARM|GEICO|PROGRESSIVE|ALLSTATE|USAA INS/, "Insurance"],
   [/AIRLINE|AIR LINES|DELTA|ALASKA AIR|SOUTHWEST|UNITED|MARRIOTT|HILTON|HYATT|AIRBNB|VRBO|EXPEDIA|HOTEL|STAYAWAY|CAR RENTAL|HERTZ|ENTERPRISE RENT/, "Travel"],
   [/CINEMA|THEATRE|THEATER|REGAL|AMC |TICKETMASTER|STEAM|PLAYSTATION|XBOX|NINTENDO|BOWL|GOLF|SKI|BOGUS BASIN|CONCERT/, "Entertainment"],
@@ -410,7 +398,7 @@ function makeDummy(){
     if(R()<.5) add(y,m,19,"STARLIGHT CINEMA",-rnd(24,48),RWD);
     if(m===0||m===1) add(y,m,10,"SUMMIT PEAK SKI AREA",-rnd(80,150),RWD);
     if(m===6){ add(y,m,8,"SKYWARD AIRLINES",-412.60,RWD); add(y,m,22,"HARBORVIEW HOTEL",-538.20,RWD); }
-    if(m===9){ add(y,m,14,"VALLEY HEALTH IMAGING CENTER",-312.40,CHK); add(y,m,3,"SKYWARD AIRLINES",-466.80,RWD); add(y,m,17,"STAYAWAY RENTALS",-760.00,RWD); add(y,m,19,"ROADWAY CAR RENTAL",-198.45,RWD); }
+    if(m===9){ add(y,m,3,"SKYWARD AIRLINES",-466.80,RWD); add(y,m,17,"STAYAWAY RENTALS",-760.00,RWD); add(y,m,19,"ROADWAY CAR RENTAL",-198.45,RWD); }
     if(m===11){ for(let i=0;i<3;i++) add(y,m,5+i*6,"MEGAMART ONLINE*GIFT",-rnd(40,120),STO); add(y,m,20,"COMMUNITY FOOD BANK DONATION",-100,CHK); }
     add(y,m,25,"REWARDS CARD AUTOPAY",-rnd(1400,2100),CHK);
     add(y,m,25,"AUTOMATIC PAYMENT - THANK YOU",rnd(1400,2100),RWD);
@@ -472,7 +460,7 @@ function renderAll(){
   $("#nextM").disabled=months.indexOf(curMonth)<=0;
   const cf=$("#catFilter").value||"All";
   $("#catFilter").innerHTML=["All",...CATS].map(c=>`<option value="${esc(c)}" ${c===cf?"selected":""}>${c==="All"?"All categories":esc(c)}</option>`).join("");
-  renderKpis(); renderSummary(); renderChart(months); renderBreakdown(); renderChanges(); renderTx();
+  renderKpis(); renderChart(months); renderBreakdown(); renderChanges(); renderTx();
 }
 function renderChips(){
   $("#chips").innerHTML=loaded.length?loaded.map(l=> l.err
@@ -500,102 +488,6 @@ function renderKpis(){
     k("Savings rate",rate===null?"—":rate.toFixed(1)+"%",
       (rate!==null&&prate!==null&&hasP)?`<span class="delta ${rate>=prate?"good":"bad"}">${rate>=prate?"▲":"▼"} ${Math.abs(rate-prate).toFixed(1)} pts</span>`:`<span class="delta flat">net ÷ income</span>`,
       `${a.n} transactions this month`);
-}
-function median(a){ if(!a.length) return 0; const s=[...a].sort((x,y)=>x-y), h=s.length>>1; return s.length%2?s[h]:(s[h-1]+s[h])/2; }
-function nice(d){ return d.replace(/\*.*$/,"").replace(/#\s*\d+/g,"").replace(/\s+\d+$/,"").replace(/\s+(PAYROLL\s+)?DIR DEP$/,"").replace(/\s+(PMT|PAYMENT|COPAY)$/,"").trim().toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()).replace(/\bOf\b/g,"of").replace(/\bAnd\b/g,"and"); }
-function renderSummary(){
-  const L=scoped(), cur=curMonth, a=monthAgg(L,cur), M=ymLabel(cur,true).split(" ")[0];
-  const F=v=>fmt.format(v), F2=v=>fmt2.format(v), dlab=d=>MONTHS[d.getMonth()]+" "+d.getDate();
-  const priors=[]; let m=cur; for(let i=0;i<3;i++){ m=prevYm(m); const g=monthAgg(L,m); if(g.n) priors.push({ym:m,...g}); }
-  const priorYms=new Set(priors.map(p=>p.ym));
-  const sixAgo=(()=>{let x=cur; for(let i=0;i<6;i++) x=prevYm(x); return x;})();
-  const yearAgo=(()=>{let x=cur; for(let i=0;i<11;i++) x=prevYm(x); return x;})();
-  const curTx=L.filter(t=>t.ym===cur);
-  const hist6=L.filter(t=>t.ym<cur&&t.ym>=sixAgo&&t.amount<0&&!NON_EXPENSE.has(t.cat));
-  const latestYm=txns.reduce((mx,t)=>t.ym>mx?t.ym:mx,"");
-  const lastD=curTx.reduce((mx,t)=>t.date>mx?t.date:mx,new Date(0));
-  const partial=cur===latestYm&&lastD.getDate()<25;
-  $("#sumTitle").textContent=`${ymLabel(cur,true)} in review`;
-  $("#sumProgress").hidden=!partial; if(partial) $("#sumProgress").textContent=`Month in progress, through ${dlab(lastD)}`;
-  const facts=[], recs=[];
-  const put=()=>{
-    const li=x=>`<li class="t-${x.tone}"><span>${x.html}</span></li>`;
-    $("#sumFacts").innerHTML=facts.length?facts.map(li).join(""):`<li class="t-info"><span>No category moved much from its usual level.</span></li>`;
-    $("#sumRecs").innerHTML=recs.map(li).join("");
-  };
-  if(!priors.length){
-    $("#sumLede").textContent=`You spent ${F(a.exp)} and brought in ${F(a.inc)} in ${M}. Load earlier months to compare against your usual spending.`;
-    recs.push({tone:"info",html:"Recommendations appear once there is at least one earlier month to compare against."}); put(); return;
-  }
-  const avg=fn=>priors.reduce((s,p)=>s+fn(p),0)/priors.length;
-  const avgExp=avg(p=>p.exp), avgInc=avg(p=>p.inc), n=priors.length;
-  const dExp=a.exp-avgExp, pExp=avgExp?dExp/avgExp*100:0;
-  const avgWord=n===1?"last month’s":`your ${n}-month average of`;
-  let lede = Math.abs(pExp)<3 ? `You spent ${F(a.exp)} in ${M}, about the same as ${avgWord} ${F(avgExp)}.`
-    : `You spent ${F(a.exp)} in ${M}, ${Math.abs(pExp).toFixed(0)}% ${dExp>0?"more":"less"} than ${avgWord} ${F(avgExp)}.`;
-  lede += a.net>=0 ? ` You kept ${F(a.net)} after expenses.` : ` Expenses ran ${F(-a.net)} over income.`;
-  if(partial) lede += " The month isn’t finished, so totals will still grow.";
-  $("#sumLede").textContent=lede;
-
-  const cats=[...new Set([...Object.keys(a.by),...priors.flatMap(p=>Object.keys(p.by))])];
-  const rows=cats.map(c=>{const cv=a.by[c]||0, av=avg(p=>p.by[c]||0); return {c,cur:cv,avg:av,diff:cv-av,pct:av>0?(cv-av)/av*100:null};});
-  const oddInfo=t=>{const amt=-t.amount,k=merchantKey(t.desc),mh=hist6.filter(h=>merchantKey(h.desc)===k).map(h=>-h.amount),
-      catMed=median(hist6.filter(h=>h.cat===t.cat).map(h=>-h.amount));
-    return {t,amt,isNew:!mh.length,isOdd:mh.length? (amt>=200&&amt>3*median(mh)) : (amt>=150&&amt>2*catMed)};};
-  const isIrregular=c=>n>=2&&priors.filter(p=>(p.by[c]||0)>0).length<n/2+.01;
-  const explained=new Set();
-  const drivers=rows.filter(r=>r.diff>Math.max(25,r.avg*.15)).sort((x,y)=>y.diff-x.diff).slice(0,3);
-  for(const d of drivers){
-    const tx=curTx.filter(t=>t.cat===d.c&&t.amount<0);
-    const odd=tx.map(oddInfo).filter(x=>x.isOdd).sort((x,y)=>y.amt-x.amt);
-    const big=odd[0];
-    const howMuch=d.pct===null?`new this month at ${F(d.cur)}`:`${d.pct.toFixed(0)}% higher than usual (${F(d.cur)} vs a ${F(d.avg)} average)`;
-    const irregular=isIrregular(d.c)||d.avg===0;
-    explained.add(d.c);
-    if(irregular){
-      const yr=L.filter(t=>t.cat===d.c&&t.ym>=yearAgo&&t.ym<=cur).reduce((s,t)=>s-t.amount,0);
-      const top=tx.slice().sort((x,y)=>x.amount-y.amount)[0];
-      facts.push({tone:"up",html:`<b>${esc(d.c)}</b> came to ${F(d.cur)}, an occasional expense that doesn’t show up most months. Largest charge: ${esc(nice(top.desc))}, ${F2(-top.amount)}.`});
-      recs.push({tone:"act",html:`${esc(d.c)} has cost ${F(yr)} over the last 12 months. Setting aside about ${F(yr/12)} a month covers it without a spike.`});
-    } else if(big&&big.amt>=.5*d.diff){
-      const without=d.cur-big.amt;
-      facts.push({tone:"up",html:`<b>${esc(d.c)}</b> spending is ${howMuch}. Most of that is one charge: ${F2(big.amt)} at ${esc(nice(big.t.desc))} on ${dlab(big.t.date)}, ${big.isNew?"a place you haven’t paid in the last six months":"far above what you usually pay there"}.`});
-      recs.push({tone:"info",html:`Treat the ${esc(nice(big.t.desc))} charge as a one-off rather than a new habit. Without it, ${esc(d.c)} was ${F(without)}, ${without<=d.avg*1.15?"in line with":"still above"} your ${F(d.avg)} average.`});
-    } else {
-      const avgCnt=L.filter(t=>priorYms.has(t.ym)&&t.cat===d.c&&t.amount<0).length/n;
-      const freq= avgCnt&&tx.length>avgCnt*1.25 ? ` from ${tx.length} transactions, up from about ${Math.round(avgCnt)}` : avgCnt ? `, with average purchases larger than usual` : "";
-      facts.push({tone:"up",html:`<b>${esc(d.c)}</b> spending is ${howMuch}${freq}.`});
-      recs.push({tone:"act",html:`Aim to keep ${esc(d.c)} near ${F(d.avg)} a month. That would have kept ${F(d.diff)} in your pocket this month.`});
-    }
-  }
-  const odds=curTx.filter(t=>t.amount<0&&!NON_EXPENSE.has(t.cat)&&!explained.has(t.cat)&&!isIrregular(t.cat)).map(oddInfo).filter(x=>x.isOdd).sort((x,y)=>y.amt-x.amt).slice(0,2);
-  for(const o of odds){
-    const r=rows.find(x=>x.c===o.t.cat)||{cur:0,avg:0};
-    facts.push({tone:"up",html:`Unusual charge: <b>${F2(o.amt)}</b> at ${esc(nice(o.t.desc))} on ${dlab(o.t.date)} (${esc(o.t.cat)}). ${o.isNew?"You haven’t paid them in the last six months.":"That’s well above your usual charge there."}`});
-    recs.push({tone:"info",html:`If the ${esc(nice(o.t.desc))} charge is a one-time cost, there’s nothing to change. Without it, ${esc(o.t.cat)} was ${F(r.cur-o.amt)} against a ${F(r.avg)} average.`});
-  }
-  const drop=rows.filter(r=>r.diff<-Math.max(25,r.avg*.15)).sort((x,y)=>x.diff-y.diff)[0];
-  if(drop&&!partial) facts.push({tone:"down",html: drop.cur<0.5 ? `No <b>${esc(drop.c)}</b> spending this month, compared with a ${F(drop.avg)} average.` : `<b>${esc(drop.c)}</b> came in ${F(-drop.diff)} under its ${F(drop.avg)} average.`});
-  if(!partial&&avgInc>0){
-    const di=(a.inc-avgInc)/avgInc*100;
-    if(di<-10) facts.push({tone:"up",html:`<b>Income</b> was ${F(a.inc)}, ${Math.abs(di).toFixed(0)}% below your ${F(avgInc)} average.`});
-    else if(di>10){ const inc=curTx.filter(t=>t.cat==="Income").sort((x,y)=>y.amount-x.amount); const extra=inc.find(t=>!L.some(h=>priorYms.has(h.ym)&&merchantKey(h.desc)===merchantKey(t.desc)));
-      facts.push({tone:"down",html:`<b>Income</b> was ${di.toFixed(0)}% above average${extra?`, helped by ${esc(nice(extra.desc))} (${F2(extra.amount)})`:""}.`}); }
-  }
-  const seenSubs=new Set(L.filter(t=>priorYms.has(t.ym)&&t.cat==="Subscriptions").map(t=>merchantKey(t.desc)));
-  const newSubs=curTx.filter(t=>t.cat==="Subscriptions"&&t.amount<0&&!seenSubs.has(merchantKey(t.desc)));
-  for(const t of newSubs.slice(0,2)){
-    facts.push({tone:"info",html:`New subscription: <b>${esc(nice(t.desc))}</b> at ${F2(-t.amount)}.`});
-    recs.push({tone:"act",html:`Confirm you want ${esc(nice(t.desc))}. At ${F2(-t.amount)} a month it adds up to ${F(-t.amount*12)} a year.`});
-  }
-  const rate=a.inc>0?a.net/a.inc*100:null, avgRate=avgInc>0?(avgInc-avgExp)/avgInc*100:null;
-  if(!partial&&rate!==null&&avgRate!==null){
-    if(rate<avgRate-5) recs.push({tone:"act",html:`Your savings rate fell to ${rate.toFixed(0)}% from a usual ${avgRate.toFixed(0)}%. Trimming the categories above gets you back on track.`});
-    else if(rate>avgRate+5) recs.push({tone:"good",html:`Your savings rate rose to ${rate.toFixed(0)}% from a usual ${avgRate.toFixed(0)}%. Consider moving the extra to savings before it gets spent.`});
-  }
-  if(!drivers.length&&dExp<0&&!partial) recs.push({tone:"good",html:`Spending was ${F(-dExp)} under your average. Moving that amount to savings locks in the gain.`});
-  if(!recs.length) recs.push({tone:"good",html:partial?"Nothing stands out yet. Check back at month end.":"Nothing needs action this month. Spending is close to normal across categories."});
-  put();
 }
 function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function renderChart(months){
@@ -695,5 +587,40 @@ new MutationObserver(()=>txns.length&&renderAll()).observe(document.documentElem
 loadSample();
 })();
 </script>
-</body>
-</html>
+
+<script>
+/* Visit alerts: sends to your Google Apps Script web app. */
+(function () {
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycby-cEKUYUybQ1nK3MwNNckIxFdSomsvr6OXDQisNcEDcP1Mqu5VolyS65yFAPhOyYszsA/exec';
+
+  if (!/^https:\/\/script\.google\.com\//.test(ENDPOINT)) return;
+  var q = new URLSearchParams(location.search), store = null;
+  try { store = window.localStorage; store.getItem('x'); } catch (e) { store = null; }
+  function get(k) { try { return store ? store.getItem(k) : null; } catch (e) { return null; } }
+  function set(k, v) { try { if (store) store.setItem(k, v); } catch (e) {} }
+
+  // Visit the site once with ?me=1 so your own visits never send an email (?me=0 undoes it).
+  if (q.get('me') === '1') set('sb_me', '1');
+  if (q.get('me') === '0') { try { store && store.removeItem('sb_me'); } catch (e) {} }
+  if (get('sb_me')) return;
+
+  var d = new Date(), today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  if (q.get('ref')) set('sb_ref', q.get('ref'));
+  if (get('sb_day') === today) return;               // already reported today
+  var vid = get('sb_vid');
+  if (!vid) { vid = Math.random().toString(36).slice(2) + Date.now().toString(36); set('sb_vid', vid); }
+  var first = get('sb_first') || today; set('sb_first', first);
+  set('sb_day', today);
+
+  var params = new URLSearchParams({
+    vid: vid, first: first, ref: q.get('ref') || get('sb_ref') || '',
+    page: document.title || location.pathname, referrer: document.referrer || '',
+    ua: navigator.userAgent, lang: navigator.language || '',
+    screen: screen.width + 'x' + screen.height,
+    tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || '')
+  });
+  try { fetch(ENDPOINT + '?' + params.toString(), { mode: 'no-cors', keepalive: true }).catch(function () {}); }
+  catch (e) { new Image().src = ENDPOINT + '?' + params.toString(); }
+})();
+</script>
+</body></html>
